@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammadiyah Digital Schooling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#2E8B6B;--primary-light:#3BA882;--primary-dark:#1A5C47;
+  --accent:#C4955A;--accent-light:#E0B87A;
+  --surface:#EFF6F3;--surface-2:#DFF0E8;--white:#ffffff;
+  --text:#1A3329;--text-muted:#4A7A65;--border:#B8D9CC;
+  --danger:#c0392b;--success:#1E9E5E;--info:#2475A8;--warn:#D97B22;
+  --r:16px;--r-sm:10px;
+  --sh:0 4px 24px rgba(46,139,107,.12);--sh-lg:0 8px 48px rgba(46,139,107,.22);
+  --verd-1:#2E8B6B;--verd-2:#3AA583;--verd-3:#1A5C47;--verd-4:#0E3D30;
+  --copper:#C4955A;--copper-light:#E0B87A;--patina:#7EC8A8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--text);overflow-x:hidden}
+h1,h2,h3,.serif{font-family:'Playfair Display',serif;line-height:1.2}
+
+/* ══ SCROLL PROGRESS BAR ══ */
+#scrollProgress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--copper),var(--copper-light),var(--patina));width:0%;z-index:9999;transition:width .1s linear;box-shadow:0 0 10px rgba(196,149,90,.6)}
+
+/* ══ PAGES ══ */
+.page{display:none;min-height:100vh;flex-direction:column}
+.page.active{display:flex}
+
+/* ══ NAVBAR ══ */
+.navbar{background:linear-gradient(135deg,var(--verd-4),var(--verd-3));padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:200;box-shadow:0 2px 24px rgba(14,61,48,.35);transition:all .3s ease}
+.navbar.scrolled{background:rgba(14,61,48,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);height:56px;box-shadow:0 4px 32px rgba(14,61,48,.5)}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:1.05rem;cursor:pointer;text-decoration:none}
+.brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--copper),var(--copper-light));border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(196,149,90,.4);transition:transform .3s ease}
+.brand:hover .brand-icon{transform:rotate(10deg) scale(1.1)}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{color:rgba(255,255,255,.8);text-decoration:none;padding:7px 14px;border-radius:7px;font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:2px;left:50%;right:50%;height:2px;background:var(--copper-light);transition:all .25s ease;border-radius:100px}
+.nav-links a:hover::after,.nav-links a.active::after{left:14px;right:14px}
+.nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.12);color:#fff}
+.btn-login-nav{background:linear-gradient(135deg,var(--copper),var(--copper-light))!important;color:var(--verd-4)!important;font-weight:700!important;box-shadow:0 2px 8px rgba(196,149,90,.35)!important}
+.btn-login-nav::after{display:none!important}
+.btn-login-nav:hover{background:var(--copper-light)!important;transform:translateY(-1px)!important}
+
+/* ══ SCROLL-TO-TOP ══ */
+#scrollTop{position:fixed;bottom:28px;right:28px;width:46px;height:46px;background:linear-gradient(135deg,var(--verd-3),var(--primary));border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:500;box-shadow:0 4px 20px rgba(46,139,107,.35);opacity:0;transform:translateY(20px) scale(.8);transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+#scrollTop.show{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
+#scrollTop:hover{transform:translateY(-3px) scale(1.08);box-shadow:0 8px 28px rgba(46,139,107,.5)}
+
+/* ══ REVEAL ANIMATIONS ══ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+.reveal.revealed{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-50px);transition:opacity .7s ease,transform .7s ease}
+.reveal-left.revealed{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(50px);transition:opacity .7s ease,transform .7s ease}
+.reveal-right.revealed{opacity:1;transform:translateX(0)}
+.reveal-scale{opacity:0;transform:scale(.85);transition:opacity .6s ease,transform .6s ease}
+.reveal-scale.revealed{opacity:1;transform:scale(1)}
+.stagger-1{transition-delay:.1s!important}
+.stagger-2{transition-delay:.2s!important}
+.stagger-3{transition-delay:.3s!important}
+.stagger-4{transition-delay:.4s!important}
+.stagger-5{transition-delay:.5s!important}
+
+/* ══ SIDEBAR (dashboard) ══ */
+.app-layout{display:flex;flex:1}
+.sidebar{width:240px;background:linear-gradient(180deg,var(--verd-4) 0%,var(--verd-3) 100%);flex-shrink:0;padding:20px 12px;display:flex;flex-direction:column;gap:4px;min-height:calc(100vh - 64px);position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
+.sidebar-section{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:10px 12px 6px;margin-top:8px}
+.sidebar a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.7);text-decoration:none;padding:9px 12px;border-radius:9px;font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(196,149,90,.22);color:var(--copper-light);font-weight:600;border-left:3px solid var(--copper)}
+.sidebar a svg{flex-shrink:0}
+.sidebar-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:100px}
+.main-content{flex:1;padding:28px;overflow-y:auto}
+
+/* ══ BUTTONS ══ */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:.875rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:inherit;text-decoration:none;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);opacity:0;transition:opacity .2s}
+.btn:hover::after{opacity:1}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 2px 10px rgba(46,139,107,.3)}.btn-primary:hover{background:linear-gradient(135deg,var(--primary-light),var(--patina));transform:translateY(-1px);box-shadow:0 4px 16px rgba(46,139,107,.4)}
+.btn-accent{background:linear-gradient(135deg,var(--copper),var(--copper-light));color:var(--verd-4);box-shadow:0 2px 8px rgba(196,149,90,.3)}.btn-accent:hover{background:var(--copper-light);transform:translateY(-2px);box-shadow:0 6px 20px rgba(196,149,90,.45)}
+.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.btn-ghost{background:transparent;color:var(--text-muted);padding:8px 14px}.btn-ghost:hover{background:var(--surface-2);color:var(--text)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{background:#a93226}
+.btn-success{background:linear-gradient(135deg,var(--success),#27C475);color:#fff}.btn-success:hover{background:var(--success)}
+.btn-sm{padding:7px 14px;font-size:.8rem}
+.btn-full{width:100%;justify-content:center}
+.btn-lg{padding:14px 28px;font-size:1rem}
+
+/* ══ RIPPLE EFFECT ══ */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.3);transform:scale(0);animation:rippleAnim .6s linear;pointer-events:none}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+
+/* ══ CARDS ══ */
+.card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--sh);transition:transform .3s ease,box-shadow .3s ease}
+.card-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-header h3{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.card-body{padding:20px 22px}
+.card-footer{padding:14px 22px;border-top:1px solid var(--border);background:var(--surface);border-radius:0 0 var(--r) var(--r)}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+
+/* ══ FORMS ══ */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.form-input{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:9px;font-size:.9rem;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;color:var(--text);background:var(--surface)}
+.form-input:focus{border-color:var(--primary-light);background:#fff;box-shadow:0 0 0 3px rgba(46,139,107,.1)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%234A7A65' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.form-check{display:flex;align-items:center;gap:8px;cursor:pointer}
+.form-check input{accent-color:var(--primary);width:16px;height:16px}
+
+/* ══ BADGES ══ */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.72rem;font-weight:700}
+.badge-primary{background:rgba(46,139,107,.12);color:var(--verd-3)}
+.badge-accent{background:rgba(196,149,90,.15);color:#8B6630}
+.badge-danger{background:#fdf0ef;color:var(--danger)}
+.badge-success{background:rgba(30,158,94,.12);color:#147A46}
+.badge-info{background:rgba(36,117,168,.12);color:#1A5C8A}
+.badge-muted{background:var(--surface-2);color:var(--text-muted)}
+
+/* ══ STAT CARDS ══ */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:18px 20px;box-shadow:var(--sh);display:flex;align-items:center;gap:14px;transition:transform .3s ease,box-shadow .3s ease}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}
+.stat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon.green{background:rgba(30,158,94,.1)}.stat-icon.gold{background:rgba(196,149,90,.12)}.stat-icon.blue{background:rgba(36,117,168,.1)}.stat-icon.red{background:#fdf0ef}
+.stat-val{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;line-height:1}
+.stat-lbl{font-size:.75rem;color:var(--text-muted);margin-top:3px}
+.stat-trend{font-size:.72rem;font-weight:600;margin-top:2px}
+.stat-trend.up{color:var(--success)}.stat-trend.down{color:var(--danger)}
+
+/* ══ PROGRESS ══ */
+.progress-bar-wrap{margin-bottom:14px}
+.progress-header{display:flex;justify-content:space-between;font-size:.83rem;margin-bottom:5px}
+.progress-label{font-weight:600}.progress-val{font-weight:700;color:var(--primary)}
+.progress-track{background:var(--surface-2);border-radius:100px;height:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:100px;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);background:linear-gradient(90deg,var(--primary),var(--patina));width:0%}
+.progress-fill.gold{background:linear-gradient(90deg,var(--copper),var(--copper-light))}
+.progress-fill.blue{background:linear-gradient(90deg,#2475A8,#3A98CC)}
+
+/* ══ XP BAR ══ */
+.xp-section{background:linear-gradient(135deg,var(--verd-4),var(--verd-3),var(--primary));border-radius:14px;padding:20px 22px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden}
+.xp-section::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(126,200,168,.15) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.xp-level{font-size:.9rem;font-weight:700}.xp-pts{font-size:.82rem;opacity:.75}
+.xp-track{background:rgba(255,255,255,.15);border-radius:100px;height:10px;overflow:hidden}
+.xp-fill{background:linear-gradient(90deg,var(--copper),var(--copper-light));height:100%;border-radius:100px;transition:width .8s ease}
+.xp-labels{display:flex;justify-content:space-between;font-size:.72rem;opacity:.6;margin-top:6px}
+
+/* ══ MISSION CARDS ══ */
+.mission-card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:20px;box-shadow:var(--sh);transition:all .3s cubic-bezier(.25,.46,.45,.94);position:relative;overflow:hidden}
+.mission-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.mission-card.green::before{background:linear-gradient(90deg,var(--success),var(--patina))}
+.mission-card.gold::before{background:linear-gradient(90deg,var(--copper),var(--copper-light))}
+.mission-card.blue::before{background:linear-gradient(90deg,#2475A8,#3A98CC)}
+.mission-card.red::before{background:linear-gradient(90deg,#c0392b,#e74c3c)}
+.mission-card:hover{transform:translateY(-5px) scale(1.01);box-shadow:0 16px 48px rgba(46,139,107,.18)}
+.mission-card.completed{opacity:.7}
+.mission-card.completed::after{content:'✓ Selesai';position:absolute;top:16px;right:16px;background:var(--success);color:#fff;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:100px}
+.mission-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;transition:transform .3s ease}
+.mission-card:hover .mission-icon-wrap{transform:scale(1.1) rotate(5deg)}
+.mission-pts{display:inline-flex;align-items:center;gap:5px;background:rgba(46,139,107,.08);border:1px solid var(--border);padding:3px 10px;border-radius:100px;font-size:.77rem;font-weight:700;color:var(--primary);margin-bottom:10px}
+.mission-title{font-weight:700;font-size:.95rem;margin-bottom:6px}
+.mission-desc{font-size:.83rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px}
+
+/* ══ LEADERBOARD ══ */
+.lb-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;transition:all .25s;cursor:default}
+.lb-row:hover{background:var(--surface-2);transform:translateX(4px)}
+.lb-row.highlight{background:rgba(196,149,90,.08);border:1px solid rgba(196,149,90,.2)}
+.lb-rank{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+.lb-rank.r1{background:rgba(196,149,90,.15);color:#8B6630;border:2px solid var(--copper)}
+.lb-rank.r2{background:#f0f0f0;color:#777;border:2px solid #bbb}
+.lb-rank.r3{background:rgba(196,149,90,.08);color:#9B6B3A;border:2px solid #C8956A}
+.lb-rank.rn{background:var(--surface-2);color:var(--text-muted);border:2px solid var(--border)}
+.lb-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.82rem;flex-shrink:0;transition:transform .2s}
+.lb-row:hover .lb-avatar{transform:scale(1.12)}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-weight:600;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sub{font-size:.72rem;color:var(--text-muted)}
+.lb-xp{font-weight:700;color:var(--primary);font-size:.88rem;white-space:nowrap}
+
+/* ══ PRAYER TIMES ══ */
+.prayer-item{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-radius:9px;transition:background .2s}
+.prayer-item:hover{background:var(--surface-2)}
+.prayer-item.active{background:linear-gradient(90deg,rgba(196,149,90,.1),transparent);border-left:3px solid var(--copper)}
+.prayer-name{font-weight:600;font-size:.875rem;display:flex;align-items:center;gap:8px}
+.prayer-time{font-weight:700;color:var(--primary);font-size:.875rem}
+.prayer-time.active{color:var(--copper)}
+
+/* ══ QURAN ══ */
+.surah-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;cursor:pointer;transition:all .2s}
+.surah-row:hover{background:var(--surface-2);transform:translateX(4px)}
+.surah-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0}
+.surah-info{flex:1}
+.surah-name{font-weight:700;font-size:.88rem}
+.surah-detail{font-size:.72rem;color:var(--text-muted);margin-top:1px}
+.surah-arabic{font-size:1.1rem;color:var(--primary);font-weight:600;margin-right:10px}
+
+/* ══ MODAL ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,40,30,.6);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(14,61,48,.35);transform:scale(.95) translateY(20px);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.modal-overlay.open .modal{transform:scale(1) translateY(0)}
+.modal-header{padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-header h3{font-size:1.15rem;font-weight:700}
+.modal-close{background:none;border:none;cursor:pointer;padding:6px;border-radius:7px;color:var(--text-muted);transition:all .2s}
+.modal-close:hover{background:var(--surface-2);color:var(--text);transform:rotate(90deg)}
+.modal-body{padding:22px 24px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+
+/* ══ TOAST ══ */
+.toast-container{position:fixed;top:80px;right:20px;z-index:2000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 18px;box-shadow:0 8px 32px rgba(14,61,48,.18);display:flex;align-items:center;gap:12px;min-width:300px;max-width:380px;pointer-events:all;transform:translateX(120%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);opacity:0}
+.toast.show{transform:translateX(0);opacity:1}
+.toast-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toast-title{font-weight:700;font-size:.875rem}
+.toast-sub{font-size:.78rem;color:var(--text-muted)}
+.toast-pts{margin-left:auto;font-weight:800;font-size:1.05rem;color:var(--success)}
+
+/* ══ TABS ══ */
+.tabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:10px;margin-bottom:20px}
+.tab{padding:8px 18px;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s;border:none;background:none;font-family:inherit}
+.tab.active{background:var(--white);color:var(--primary);box-shadow:0 2px 8px rgba(46,139,107,.12)}
+
+/* ══ TABLE ══ */
+.table{width:100%;border-collapse:collapse}
+.table th{text-align:left;padding:10px 14px;font-size:.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);background:var(--surface)}
+.table td{padding:12px 14px;font-size:.875rem;border-bottom:1px solid var(--surface-2);vertical-align:middle}
+.table tr:last-child td{border-bottom:none}
+.table tr:hover td{background:var(--surface)}
+
+/* ══ CHECKLIST ══ */
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:12px;background:var(--surface-2);border-radius:9px;margin-bottom:9px;cursor:pointer;transition:all .2s}
+.check-item:hover{background:rgba(46,139,107,.08);transform:translateX(3px)}
+.check-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--white);transition:all .3s cubic-bezier(.34,1.56,.64,1);margin-top:1px}
+.check-box.done{background:linear-gradient(135deg,var(--success),#27C475);border-color:var(--success);transform:scale(1.1)}
+.check-text{font-size:.85rem;line-height:1.5;flex:1}
+.check-text.done{text-decoration:line-through;color:var(--text-muted)}
+
+/* ══ NOTIFICATION ITEMS ══ */
+.notif-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:10px;background:var(--surface-2);margin-bottom:10px;cursor:pointer;transition:all .2s}
+.notif-item:hover{background:rgba(46,139,107,.08);transform:translateX(4px)}
+.notif-item.unread{background:rgba(46,139,107,.06);border-left:3px solid var(--primary)}
+.notif-icon-wrap{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-title{font-weight:700;font-size:.875rem;margin-bottom:2px}
+.notif-sub{font-size:.78rem;color:var(--text-muted);line-height:1.4}
+.notif-time{font-size:.7rem;color:var(--text-muted);margin-top:4px}
+
+/* ══ QUOTE ══ */
+.quote-box{background:linear-gradient(135deg,var(--verd-3),var(--primary));border-radius:var(--r);padding:24px;color:#fff;position:relative;overflow:hidden}
+.quote-box::before{content:'"';position:absolute;top:-20px;left:12px;font-size:100px;font-family:'Playfair Display',serif;opacity:.1;line-height:1;color:var(--copper-light)}
+.quote-text{font-family:'Playfair Display',serif;font-size:.95rem;line-height:1.65;margin-bottom:10px;font-style:italic}
+.quote-src{font-size:.75rem;opacity:.7}
+
+/* ══ HERO ══ */
+.hero{background:linear-gradient(135deg,var(--verd-4) 0%,var(--verd-3) 50%,var(--primary) 100%);padding:100px 48px;position:relative;overflow:hidden;min-height:90vh;display:flex;align-items:center}
+
+/* Animated mesh background */
+.hero-mesh{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-mesh-circle{position:absolute;border-radius:50%;filter:blur(80px);animation:meshFloat 8s ease-in-out infinite alternate}
+.hero-mesh-circle:nth-child(1){width:500px;height:500px;background:radial-gradient(circle,rgba(196,149,90,.12) 0%,transparent 70%);top:-100px;right:-100px;animation-delay:0s}
+.hero-mesh-circle:nth-child(2){width:400px;height:400px;background:radial-gradient(circle,rgba(126,200,168,.1) 0%,transparent 70%);bottom:-80px;left:-60px;animation-delay:2s}
+.hero-mesh-circle:nth-child(3){width:300px;height:300px;background:radial-gradient(circle,rgba(46,139,107,.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:4s}
+@keyframes meshFloat{0%{transform:translate(0,0) scale(1)}100%{transform:translate(30px,-20px) scale(1.05)}}
+.hero-mesh-circle:nth-child(2){animation-name:meshFloat2}
+@keyframes meshFloat2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-20px,30px) scale(1.08)}}
+
+/* Dot grid overlay */
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;opacity:.6}
+
+.hero-inner{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:2}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(196,149,90,.18);border:1px solid rgba(196,149,90,.35);color:var(--copper-light);padding:5px 14px;border-radius:100px;font-size:.75rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:20px;animation:heroBadgeIn .8s ease .2s both}
+@keyframes heroBadgeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{font-size:2.9rem;color:#fff;margin-bottom:18px;line-height:1.15;animation:heroH1In .9s ease .35s both}
+@keyframes heroH1In{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero h1 span{color:var(--copper-light)}
+.hero p{color:rgba(255,255,255,.75);font-size:1rem;line-height:1.7;margin-bottom:30px;animation:heroParaIn .9s ease .5s both}
+@keyframes heroParaIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:heroBtnsIn .9s ease .65s both}
+@keyframes heroBtnsIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px;animation:heroStatsIn .9s ease .8s both}
+@keyframes heroStatsIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px;text-align:center;backdrop-filter:blur(4px);transition:all .3s ease}
+.hero-stat:hover{background:rgba(255,255,255,.12);transform:translateY(-4px);border-color:rgba(196,149,90,.4)}
+.hero-stat-num{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--copper-light);font-weight:700}
+.hero-stat-lbl{font-size:.72rem;color:rgba(255,255,255,.6);margin-top:3px}
+.dash-preview{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:24px;color:#fff;backdrop-filter:blur(8px);animation:previewIn 1s ease .5s both;transition:transform .4s ease,box-shadow .4s ease}
+@keyframes previewIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.dash-preview:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(14,61,48,.4)}
+
+/* ══ FLOATING SHAPES ══ */
+.hero-float-shape{position:absolute;pointer-events:none;z-index:1}
+.hero-float-shape:nth-child(1){top:15%;right:5%;width:60px;height:60px;border:2px solid rgba(196,149,90,.25);border-radius:50%;animation:floatRot 6s ease-in-out infinite}
+.hero-float-shape:nth-child(2){top:65%;right:8%;width:30px;height:30px;background:rgba(196,149,90,.15);border-radius:7px;animation:floatRot 8s ease-in-out infinite reverse;animation-delay:1s}
+.hero-float-shape:nth-child(3){top:30%;right:18%;width:16px;height:16px;background:rgba(126,200,168,.3);border-radius:50%;animation:floatBob 4s ease-in-out infinite;animation-delay:2s}
+@keyframes floatRot{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(180deg)}}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ══ SECTION ══ */
+.section{padding:80px 48px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-tag{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
+.section-title{font-size:2rem;color:var(--text);margin-bottom:10px}
+.section-sub{color:var(--text-muted);font-size:.92rem;line-height:1.7;max-width:540px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+
+/* ══ LOGIN PAGE ══ */
+.login-page{background:linear-gradient(135deg,var(--verd-4),var(--verd-3),var(--primary));min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+.login-page::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(126,200,168,.08) 0%,transparent 70%);border-radius:50%}
+.login-page::after{content:'';position:absolute;bottom:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(196,149,90,.08) 0%,transparent 70%);border-radius:50%}
+.login-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:900px;width:100%;align-items:center;position:relative;z-index:1}
+.login-card{background:var(--white);border-radius:20px;padding:36px;box-shadow:0 24px 80px rgba(10,40,30,.35)}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.role-btn{padding:12px 8px;border:2px solid var(--border);border-radius:10px;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface)}
+.role-btn:hover,.role-btn.active{border-color:var(--primary);background:rgba(46,139,107,.08);transform:translateY(-2px)}
+.role-btn-label{font-size:.78rem;font-weight:600;margin-top:5px;color:var(--text)}
+
+/* ══ FOOTER ══ */
+footer{background:linear-gradient(135deg,var(--verd-4),var(--verd-3));color:rgba(255,255,255,.75);padding:48px 48px 24px}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px}
+.footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.footer-brand-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:#fff}
+.footer-desc{font-size:.83rem;line-height:1.7;margin-bottom:18px}
+.footer-contact-item{display:flex;align-items:center;gap:8px;font-size:.8rem;margin-bottom:7px}
+footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer-links a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.82rem;cursor:pointer;transition:all .2s;position:relative;padding-left:0}
+.footer-links a:hover{color:var(--copper-light);padding-left:6px}
+.footer-bottom{max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,.1);padding-top:18px;display:flex;justify-content:space-between;align-items:center;font-size:.77rem;color:rgba(255,255,255,.4)}
+
+/* ══ FAQ ══ */
+.faq-item{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:box-shadow .2s}
+.faq-item:hover{box-shadow:var(--sh)}
+.faq-q{padding:16px 20px;font-weight:600;font-size:.9rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .2s;gap:12px}
+.faq-q:hover{background:var(--surface-2)}
+.faq-q svg{flex-shrink:0;transition:transform .3s ease}
+.faq-a{padding:0;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;font-size:.85rem;color:var(--text-muted);line-height:1.7}
+.faq-a.open{max-height:200px;padding:0 20px 16px}
+
+/* ══ NEWS ══ */
+.news-card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:var(--sh);transition:all .3s cubic-bezier(.25,.46,.45,.94);cursor:pointer}
+.news-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 20px 50px rgba(46,139,107,.18)}
+.news-thumb{height:160px;background:linear-gradient(135deg,var(--verd-4),var(--primary-light));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.news-thumb-img{position:absolute;inset:0;transition:transform .6s ease}
+.news-card:hover .news-thumb-img{transform:scale(1.08)}
+.news-cat{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--copper),var(--copper-light));color:var(--verd-4);padding:3px 10px;border-radius:5px;font-size:.68rem;font-weight:700;text-transform:uppercase}
+.news-body{padding:16px 18px}
+.news-meta{font-size:.73rem;color:var(--text-muted);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.news-title{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:700;line-height:1.35;margin-bottom:7px}
+.news-excerpt{font-size:.82rem;color:var(--text-muted);line-height:1.55}
+.news-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px}
+.news-tag{background:rgba(46,139,107,.08);color:var(--primary);padding:2px 9px;border-radius:5px;font-size:.7rem;font-weight:600;transition:all .2s}
+.news-tag:hover{background:rgba(46,139,107,.15)}
+
+/* ══ PROFILE ══ */
+.profile-hero{background:linear-gradient(135deg,var(--verd-4),var(--primary));border-radius:var(--r);padding:28px;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:20px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;border:3px solid rgba(255,255,255,.3);background:linear-gradient(135deg,var(--copper),var(--copper-light));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--verd-4);flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,.25);transition:transform .3s ease}
+.profile-avatar:hover{transform:scale(1.08) rotate(5deg)}
+.profile-name{font-size:1.2rem;font-weight:700;margin-bottom:3px}
+.profile-sub{font-size:.82rem;opacity:.75;margin-bottom:8px}
+.profile-badges{display:flex;gap:6px;flex-wrap:wrap}
+.profile-badge{background:rgba(196,149,90,.2);border:1px solid rgba(196,149,90,.35);color:var(--copper-light);padding:3px 10px;border-radius:100px;font-size:.72rem;font-weight:700}
+
+/* ══ ACHIEVEMENT ══ */
+.achievement{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;background:var(--surface-2);margin-bottom:9px;transition:all .2s}
+.achievement:hover{background:rgba(196,149,90,.08);transform:translateX(4px)}
+.ach-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ach-name{font-weight:700;font-size:.88rem}
+.ach-desc{font-size:.75rem;color:var(--text-muted)}
+.ach-pts{margin-left:auto;font-weight:800;color:var(--copper);font-size:.88rem}
+
+/* ══ SETTINGS ══ */
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--surface-2);transition:background .2s}
+.setting-row:last-child{border-bottom:none}
+.setting-info{flex:1}
+.setting-title{font-weight:600;font-size:.9rem;margin-bottom:2px}
+.setting-sub{font-size:.78rem;color:var(--text-muted)}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:100px;transition:.3s}
+.toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:linear-gradient(135deg,var(--primary),var(--primary-light))}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px)}
+
+/* ══ CALENDAR ══ */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-day{text-align:center;padding:6px 4px;border-radius:7px;font-size:.75rem;cursor:pointer;transition:all .2s}
+.cal-day:hover{background:var(--surface-2);transform:scale(1.1)}
+.cal-day.today{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;font-weight:700}
+.cal-day.has-event::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--copper);margin:2px auto 0}
+.cal-day.other-month{color:var(--text-muted);opacity:.4}
+.cal-header-day{text-align:center;font-size:.7rem;font-weight:700;color:var(--text-muted);padding:4px;text-transform:uppercase}
+
+/* ══ COUNTER ANIMATION ══ */
+.counter-num{display:inline-block;font-family:'Playfair Display',serif}
+
+/* ══ FEATURE SECTION BIG NUMBERS ══ */
+.big-feature{display:flex;gap:6px;align-items:flex-start;margin-bottom:32px}
+.big-num{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;color:var(--primary);line-height:1;opacity:.15;flex-shrink:0}
+.big-feature-content{padding-top:8px}
+.big-feature-title{font-weight:700;font-size:1rem;margin-bottom:4px}
+.big-feature-desc{font-size:.83rem;color:var(--text-muted);line-height:1.6}
+
+/* ══ TICKER ══ */
+.ticker-wrap{background:linear-gradient(90deg,var(--verd-4),var(--verd-3));padding:10px 0;overflow:hidden;position:relative}
+.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2}
+.ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--verd-4),transparent)}
+.ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--verd-3),transparent)}
+.ticker{display:flex;gap:0;white-space:nowrap;animation:ticker 30s linear infinite}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,.8);font-size:.8rem;font-weight:500;padding:0 24px}
+.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--copper-light);flex-shrink:0}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ══ CUSTOM CURSOR (subtle glow on landing) ══ */
+.cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(196,149,90,.06) 0%,transparent 70%);pointer-events:none;z-index:0;transition:transform .15s ease;will-change:transform;left:-150px;top:-150px}
+
+/* ══ SECTION DIVIDER ══ */
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0}
+
+/* ══ GLASS CARD ══ */
+.glass-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;backdrop-filter:blur(10px)}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bounceIn{0%{transform:scale(.3);opacity:0}50%{transform:scale(1.05)}70%{transform:scale(.9)}100%{transform:scale(1);opacity:1}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.anim-fade{animation:fadeIn .4s ease forwards}
+.anim-slide{animation:slideIn .3s ease forwards}
+
+/* ══ LOADING SKELETON (for modern feel) ══ */
+.skeleton{background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface) 50%,var(--surface-2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+
+/* ══ HAMBURGER MENU ══ */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:9px;cursor:pointer;padding:8px;flex-shrink:0;transition:background .2s}
+.hamburger:hover{background:rgba(255,255,255,.18)}
+.hamburger span{display:block;height:2px;background:#fff;border-radius:2px;transition:all .3s cubic-bezier(.34,1.56,.64,1);transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Mobile nav drawer */
+.mobile-nav-drawer{position:fixed;inset:0;z-index:190;pointer-events:none}
+.mobile-nav-backdrop{position:absolute;inset:0;background:rgba(10,40,30,.55);backdrop-filter:blur(4px);opacity:0;transition:opacity .3s ease}
+.mobile-nav-panel{position:absolute;top:0;right:0;width:min(320px,90vw);height:100%;background:linear-gradient(180deg,var(--verd-4),var(--verd-3));padding:80px 20px 32px;display:flex;flex-direction:column;gap:4px;transform:translateX(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);overflow-y:auto;box-shadow:-8px 0 40px rgba(14,61,48,.4)}
+.mobile-nav-drawer.open{pointer-events:all}
+.mobile-nav-drawer.open .mobile-nav-backdrop{opacity:1}
+.mobile-nav-drawer.open .mobile-nav-panel{transform:translateX(0)}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.8);text-decoration:none;padding:13px 16px;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s}
+.mobile-nav-panel a:hover{background:rgba(255,255,255,.1);color:#fff;transform:translateX(4px)}
+.mobile-nav-panel .mobile-nav-login{background:linear-gradient(135deg,var(--copper),var(--copper-light));color:var(--verd-4)!important;font-weight:700;margin-top:12px;justify-content:center}
+.mobile-nav-divider{height:1px;background:rgba(255,255,255,.1);margin:8px 0}
+.mobile-nav-close{position:absolute;top:20px;right:20px;width:36px;height:36px;background:rgba(255,255,255,.1);border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;transition:background .2s}
+.mobile-nav-close:hover{background:rgba(255,255,255,.18)}
+
+/* ══ BOTTOM TAB BAR (mobile dashboard) ══ */
+.bottom-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,var(--verd-4),var(--verd-3));padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:150;box-shadow:0 -2px 20px rgba(14,61,48,.3);border-top:1px solid rgba(255,255,255,.08)}
+.bottom-tab-bar-inner{display:flex;justify-content:space-around;align-items:center;max-width:480px;margin:0 auto}
+.bottom-tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:10px;cursor:pointer;transition:all .2s;border:none;background:none;color:rgba(255,255,255,.55);font-family:inherit;position:relative}
+.bottom-tab.active{color:var(--copper-light)}
+.bottom-tab svg{transition:transform .2s}
+.bottom-tab.active svg{transform:scale(1.1)}
+.bottom-tab span{font-size:.6rem;font-weight:600;white-space:nowrap}
+.bottom-tab-badge{position:absolute;top:2px;right:6px;width:16px;height:16px;background:var(--danger);border-radius:50%;font-size:.55rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--verd-4)}
+
+/* ══ RESPONSIVE: DESKTOP ══ */
+@media(min-width:1025px){
+  .hamburger{display:none}
+  .mobile-nav-drawer{display:none}
+  .bottom-tab-bar{display:none}
+}
+
+/* ══ RESPONSIVE: TABLET (768–1024px) ══ */
+@media(max-width:1024px){
+  .navbar{padding:0 24px}
+  .brand{font-size:.9rem}
+  .brand span{display:none}
+  .nav-links a:not(.btn-login-nav){display:none}
+  .hamburger{display:flex}
+
+  .sidebar{width:64px}
+  .sidebar-section{display:none}
+  .sidebar a span{display:none}
+  .sidebar a{padding:12px;justify-content:center;border-left:none!important}
+  .sidebar a.active{border-left:none!important;border-right:3px solid var(--copper)}
+  .sidebar-badge{display:none}
+  .main-content{padding:20px}
+
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .hero{padding:72px 32px}
+  .hero h1{font-size:2.2rem}
+  .section{padding:60px 32px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .login-wrap{gap:32px}
+}
+
+/* ══ RESPONSIVE: MOBILE (≤767px) ══ */
+@media(max-width:767px){
+  /* --- Nav --- */
+  .navbar{padding:0 16px;height:58px}
+  .brand{font-size:.82rem;gap:8px}
+  .brand-text{display:none}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+
+  /* --- Cursor & floating effects off on touch --- */
+  .cursor-glow{display:none}
+  .hero-float-shape{display:none}
+
+  /* --- Ticker --- */
+  .ticker-item{font-size:.72rem;padding:0 16px}
+
+  /* --- Hero --- */
+  .hero{padding:52px 20px 60px;min-height:auto}
+  .hero-grid{grid-template-columns:1fr;gap:32px}
+  .hero h1{font-size:1.75rem;margin-bottom:14px}
+  .hero p{font-size:.9rem}
+  .hero-badge{font-size:.68rem;padding:4px 12px}
+  .hero-btns{gap:10px}
+  .hero-btns .btn-lg{padding:12px 20px;font-size:.875rem}
+  .hero-stats-row{grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
+  .hero-stat{padding:10px 8px}
+  .hero-stat-num{font-size:1.25rem}
+  .hero-stat-lbl{font-size:.65rem}
+  .dash-preview{padding:18px}
+  .dash-preview .glass-card{padding:10px 8px}
+
+  /* --- Sections --- */
+  .section{padding:44px 20px}
+  .section-title{font-size:1.6rem}
+
+  /* --- Grids --- */
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .stat-card{padding:14px 12px;gap:10px}
+  .stat-val{font-size:1.35rem}
+
+  /* --- Mission cards --- */
+  #misiGrid{grid-template-columns:1fr}
+
+  /* --- Cards --- */
+  .card-header{padding:14px 16px;flex-wrap:wrap;gap:8px}
+  .card-body{padding:14px 16px}
+  .card-footer{padding:12px 16px}
+
+  /* --- Dashboard sidebar → bottom bar --- */
+  .app-layout{flex-direction:column}
+  .sidebar{display:none}
+  .main-content{padding:16px 16px 80px;max-height:none}
+  .bottom-tab-bar{display:block}
+
+  /* --- Check items --- */
+  .check-item{padding:10px}
+  .check-text{font-size:.82rem}
+
+  /* --- Tables → horizontal scroll --- */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .table{min-width:420px}
+
+  /* --- Leaderboard --- */
+  .lb-row{padding:10px 12px;gap:8px}
+  .lb-name{font-size:.82rem}
+  .lb-xp{font-size:.8rem}
+
+  /* --- Prayer --- */
+  .prayer-item{padding:9px 12px}
+
+  /* --- Surah row --- */
+  .surah-row{padding:10px 12px;gap:8px}
+  .surah-arabic{display:none}
+
+  /* --- XP section --- */
+  .xp-section{padding:16px}
+  .xp-level{font-size:.82rem}
+
+  /* --- Login page --- */
+  .login-page{padding:20px 16px;align-items:flex-start;padding-top:40px}
+  .login-wrap{grid-template-columns:1fr;gap:28px}
+  .login-wrap>div:first-child{display:none}
+  .login-card{padding:24px 20px}
+  .role-grid{grid-template-columns:repeat(3,1fr)}
+
+  /* --- Profile hero --- */
+  .profile-hero{flex-direction:column;text-align:center;gap:14px;padding:22px 18px}
+  .profile-hero>div:last-child{text-align:center}
+  .profile-avatar{margin:0 auto}
+  .profile-badges{justify-content:center}
+
+  /* --- Footer --- */
+  footer{padding:36px 20px 20px}
+  .footer-grid{grid-template-columns:1fr;gap:28px}
+  .footer-bottom{flex-direction:column;gap:6px;text-align:center}
+
+  /* --- FAQ grid → single col --- */
+  #bantuan .grid-2{grid-template-columns:1fr}
+
+  /* --- Tentang grid --- */
+  #tentang .grid-2{grid-template-columns:1fr}
+
+  /* --- Monitoring grid --- */
+  .section .grid-2{grid-template-columns:1fr}
+
+  /* --- Big numbers feature --- */
+  .big-num{font-size:2.8rem}
+
+  /* --- Scroll top button positioning --- */
+  #scrollTop{bottom:80px;right:16px;width:40px;height:40px}
+
+  /* --- Toast --- */
+  .toast-container{left:12px;right:12px;top:70px}
+  .toast{min-width:0;width:100%}
+
+  /* --- Modal --- */
+  .modal{border-radius:14px 14px 0 0;max-height:95vh;position:fixed;bottom:0;left:0;right:0;max-width:100%}
+  .modal-overlay{align-items:flex-end;padding:0}
+
+  /* --- Calendar --- */
+  .cal-day{padding:5px 2px;font-size:.7rem}
+  .cal-header-day{font-size:.62rem;padding:3px 2px}
+
+  /* --- News detail --- */
+  #newsDetailContent{padding:24px 16px}
+
+  /* --- Tabs scroll on mobile --- */
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .tab{white-space:nowrap;flex-shrink:0}
+
+  /* --- CTA section inner --- */
+  .reveal-scale>div{padding:36px 20px!important}
+  .reveal-scale h2{font-size:1.6rem!important}
+
+  /* --- About values grid --- */
+  #tentang .grid-2>div:last-child>div{grid-template-columns:1fr 1fr}
+}
+
+/* ══ RESPONSIVE: SMALL PHONES (≤380px) ══ */
+@media(max-width:380px){
+  .hero h1{font-size:1.5rem}
+  .stat-grid{grid-template-columns:1fr}
+  .hero-stats-row{grid-template-columns:1fr}
+  .role-grid{grid-template-columns:1fr}
+  .hero-btns{flex-direction:column}
+  .hero-btns .btn{width:100%;justify-content:center}
+  .navbar{height:54px}
+}
+
+/* ══ SAFE AREA (notch/home bar) ══ */
+@supports(padding: env(safe-area-inset-bottom)){
+  .bottom-tab-bar{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  .main-content{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+}
+
+/* ══ TOUCH DEVICE OPTIMIZATIONS ══ */
+@media(hover:none){
+  .card:hover{transform:none;box-shadow:var(--sh)}
+  .news-card:hover{transform:none;box-shadow:var(--sh)}
+  .mission-card:hover{transform:none;box-shadow:var(--sh)}
+  .btn-accent:hover{transform:none}
+  .btn-primary:hover{transform:none}
+  .lb-row:hover{transform:none}
+  .surah-row:hover{transform:none}
+  /* Ensure tap targets are large enough */
+  .btn{min-height:44px}
+  .sidebar a,.bottom-tab{min-height:44px}
+  .check-item{min-height:44px}
+  .nav-links a{min-height:44px}
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="scrollProgress"></div>
+
+<!-- CURSOR GLOW -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- SCROLL TO TOP -->
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Kembali ke atas">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: LANDING
+═══════════════════════════════════════════ -->
+<div id="page-landing" class="page active" style="flex-direction:column">
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="mainNav">
+    <a class="brand" onclick="showPage('landing')">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/><path d="M12 2v20M3 7l9 5 9-5" stroke="white" stroke-width="1.5"/></svg>
+      </div>
+      <span class="brand-text">SMA MUHAMMADIYAH 1 GRESIK</span>
+    </a>
+    <div class="nav-links">
+      <a class="active" onclick="showPage('landing')">Home</a>
+      <a onclick="scrollToSection('fitur')">Fitur Karakter</a>
+      <a onclick="scrollToSection('berita')">Berita</a>
+      <a onclick="scrollToSection('tentang')">Tentang Kami</a>
+      <a onclick="scrollToSection('bantuan')">Bantuan</a>
+      <a class="btn-login-nav" onclick="showPage('login')">Login</a>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE NAV DRAWER -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-nav-backdrop" onclick="toggleMobileNav()"></div>
+    <div class="mobile-nav-panel">
+      <button class="mobile-nav-close" onclick="toggleMobileNav()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div style="padding:0 4px 16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px">Platform</div>
+        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;line-height:1.3">SMA Muhammadiyah 1 Gresik</div>
+      </div>
+      <a onclick="showPage('landing');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/></svg>Home</a>
+      <a onclick="scrollToSection('fitur');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Fitur Karakter</a>
+      <a onclick="scrollToSection('berita');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Berita</a>
+      <a onclick="scrollToSection('tentang');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Tentang Kami</a>
+      <a onclick="scrollToSection('bantuan');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Bantuan</a>
+      <div class="mobile-nav-divider"></div>
+      <a class="mobile-nav-login" onclick="showPage('login');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Masuk ke Portal</a>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker" id="tickerInner">
+      <span class="ticker-item"><span class="ticker-dot"></span>Daily Akhlak Quest — Misi karakter interaktif harian</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Selamat! Kelas 9A meraih posisi #1 Leaderboard minggu ini</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>PPDB 2026/2027 telah dibuka — Daftar sekarang</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Juara Tahfidz Provinsi Jawa Barat — Alhamdulillah!</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Workshop Robotik & AI — 22 Maret 2026, Lab Komputer</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Daily Akhlak Quest — Misi karakter interaktif harian</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Selamat! Kelas 9A meraih posisi #1 Leaderboard minggu ini</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>PPDB 2026/2027 telah dibuka — Daftar sekarang</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Juara Tahfidz Provinsi Jawa Barat — Alhamdulillah!</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Workshop Robotik & AI — 22 Maret 2026, Lab Komputer</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-mesh">
+      <div class="hero-mesh-circle"></div>
+      <div class="hero-mesh-circle"></div>
+      <div class="hero-mesh-circle"></div>
+    </div>
+    <div class="hero-dots"></div>
+    <div class="hero-float-shape"></div>
+    <div class="hero-float-shape"></div>
+    <div class="hero-float-shape"></div>
+    <div class="hero-inner">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="#E0B87A"/></svg>
+            Platform Digital Karakter Berkemajuan
+          </div>
+          <h1>Membentuk Generasi <span>Berkemajuan</span> &amp; Berkarakter</h1>
+          <p>Integrasi nilai-nilai Kemuhammadiyahan dalam pengalaman interaktif untuk mencetak generasi unggul berkemajuan.</p>
+          <div class="hero-btns">
+            <button class="btn btn-accent btn-lg" onclick="showPage('login')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Mulai Sekarang
+            </button>
+            <button class="btn btn-outline btn-lg" style="color:#fff;border-color:rgba(255,255,255,.35)" onclick="scrollToSection('tentang')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/><path d="M12 8v4l3 3" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+              Pelajari Lebih
+            </button>
+          </div>
+          <div class="hero-stats-row">
+            <div class="hero-stat"><div class="hero-stat-num counter-num" data-target="5000" data-suffix="+">0</div><div class="hero-stat-lbl">Siswa Terdaftar</div></div>
+            <div class="hero-stat"><div class="hero-stat-num counter-num" data-target="8500" data-suffix="+">0</div><div class="hero-stat-lbl">Misi Selesai</div></div>
+            <div class="hero-stat"><div class="hero-stat-num counter-num" data-target="45" data-suffix="">0</div><div class="hero-stat-lbl">Kategori Akhlak</div></div>
+          </div>
+        </div>
+        <div class="dash-preview">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div><div style="font-size:.8rem;opacity:.65">Assalamu'alaikum,</div><div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700">Ahmad Fauzi</div></div>
+            <span class="badge badge-accent">Level 12: Mujahid</span>
+          </div>
+          <div style="margin-bottom:18px">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;opacity:.65;margin-bottom:6px"><span>1,240 XP</span><span>85% to Level 13</span></div>
+            <div style="background:rgba(255,255,255,.15);border-radius:100px;height:9px;overflow:hidden"><div style="background:linear-gradient(90deg,var(--copper),var(--copper-light));height:100%;width:85%;border-radius:100px;transition:width 1.5s ease"></div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+            <div class="glass-card" style="padding:12px;text-align:center;transition:transform .2s"><div style="font-weight:700;font-size:1.1rem">14</div><div style="font-size:.7rem;opacity:.6;margin-top:2px">Hari Streak</div></div>
+            <div class="glass-card" style="padding:12px;text-align:center;transition:transform .2s"><div style="font-weight:700;font-size:1.1rem">2,450</div><div style="font-size:.7rem;opacity:.6;margin-top:2px">Total Poin</div></div>
+            <div class="glass-card" style="padding:12px;text-align:center;transition:transform .2s"><div style="font-weight:700;font-size:1.1rem">#4</div><div style="font-size:.7rem;opacity:.6;margin-top:2px">Peringkat</div></div>
+          </div>
+          <div style="background:rgba(30,158,94,.15);border:1px solid rgba(30,158,94,.3);border-radius:9px;padding:11px 14px;display:flex;align-items:center;gap:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#27C475" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><div style="font-size:.8rem;font-weight:700;color:#27C475">Alhamdulillah! Tilawah Selesai</div><div style="font-size:.72rem;opacity:.7">+50 XP terkumpul hari ini</div></div>
+            <div style="margin-left:auto;font-weight:800;color:#27C475;font-size:1rem">+50</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FITUR -->
+  <section class="section" id="fitur" style="background:var(--white)">
+    <div class="section-inner">
+      <div style="text-align:center;margin-bottom:50px" class="reveal">
+        <div class="section-tag" style="display:block;text-align:center">Daily Akhlak Quest</div>
+        <h2 class="section-title" style="font-size:2.2rem">Fitur Karakter Utama</h2>
+        <p class="section-sub" style="margin:0 auto;text-align:center">Tiga pilar pembentukan karakter yang terintegrasi dalam pengalaman digital yang menyenangkan</p>
+      </div>
+      <div class="grid-3">
+        <div class="mission-card green reveal stagger-1" style="text-align:center;padding:28px">
+          <div class="mission-icon-wrap" style="margin:0 auto 16px;background:rgba(30,158,94,.1)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--success)" stroke-width="2"/><path d="M12 6v6l4 2" stroke="var(--success)" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3 style="font-size:1.1rem;margin-bottom:8px">Spiritual</h3>
+          <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px">Membentuk disiplin spiritual harian melalui pengingat dan check-in shalat berjamaah yang terstruktur.</p>
+          <span class="badge badge-success">+50 Poin/Hari</span>
+        </div>
+        <div class="mission-card gold reveal stagger-2" style="text-align:center;padding:28px">
+          <div class="mission-icon-wrap" style="margin:0 auto 16px;background:rgba(196,149,90,.12)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="var(--copper)" stroke-width="2"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="var(--copper)" stroke-width="2"/></svg>
+          </div>
+          <h3 style="font-size:1.1rem;margin-bottom:8px">Literasi Qur'ani</h3>
+          <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px">Menjaga kedekatan dengan kalamullah melalui target tilawah harian yang disesuaikan kemampuan.</p>
+          <span class="badge badge-accent">+30 Poin/Hari</span>
+        </div>
+        <div class="mission-card blue reveal stagger-3" style="text-align:center;padding:28px">
+          <div class="mission-icon-wrap" style="margin:0 auto 16px;background:rgba(36,117,168,.1)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="var(--info)" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="var(--info)" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="var(--info)" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3 style="font-size:1.1rem;margin-bottom:8px">Sosial &amp; Adab</h3>
+          <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px">Praktik langsung akhlak mulia kepada orang tua dan guru di lingkungan sekolah setiap hari.</p>
+          <span class="badge badge-info">+45 Poin/Hari</span>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:32px" class="reveal">
+        <button class="btn btn-primary btn-lg" onclick="showPage('login')">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Masuk &amp; Mulai Misi
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- MONITORING -->
+  <section class="section" style="background:var(--surface)">
+    <div class="section-inner">
+      <div class="grid-2" style="align-items:center;gap:64px">
+        <div class="reveal-left">
+          <div class="section-tag">Sistem Monitoring Terpadu</div>
+          <h2 class="section-title">Pantau Perkembangan Karakter Secara Real-time</h2>
+          <p style="color:var(--text-muted);line-height:1.7;margin-bottom:28px">Dashboard interaktif bagi siswa, guru, dan orang tua untuk melihat statistik capaian akhlak dan nilai-nilai keislaman.</p>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="big-feature">
+              <div class="big-num">01</div>
+              <div class="big-feature-content">
+                <div class="big-feature-title">Laporan Otomatis WhatsApp</div>
+                <div class="big-feature-desc">Notifikasi perkembangan harian langsung ke ponsel orang tua secara otomatis.</div>
+              </div>
+            </div>
+            <div class="big-feature">
+              <div class="big-num">02</div>
+              <div class="big-feature-content">
+                <div class="big-feature-title">Leaderboard Antar Kelas</div>
+                <div class="big-feature-desc">Kompetisi sehat dalam kebaikan — fastabiqul khairat, berlomba dalam kebaikan.</div>
+              </div>
+            </div>
+            <div class="big-feature">
+              <div class="big-num">03</div>
+              <div class="big-feature-content">
+                <div class="big-feature-title">Sertifikat Digital</div>
+                <div class="big-feature-desc">E-certificate terverifikasi untuk setiap pencapaian milestone karakter.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <div class="card" style="overflow:hidden">
+            <div class="card-header"><h3>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 17l4-8 4 4 4-6 4 4" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Statistik Karakter — Kelas XI-A
+            </h3></div>
+            <div class="card-body">
+              <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Kedisiplinan Shalat</span><span class="progress-val">92%</span></div><div class="progress-track"><div class="progress-fill animated-bar" data-width="92"></div></div></div>
+              <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Tilawah Harian</span><span class="progress-val">85%</span></div><div class="progress-track"><div class="progress-fill animated-bar" data-width="85"></div></div></div>
+              <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Adab &amp; Sosial</span><span class="progress-val">78%</span></div><div class="progress-track"><div class="progress-fill gold animated-bar" data-width="78"></div></div></div>
+              <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Ibadah Sunnah</span><span class="progress-val">65%</span></div><div class="progress-track"><div class="progress-fill blue animated-bar" data-width="65"></div></div></div>
+            </div>
+            <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.78rem;color:var(--text-muted)">Update: 09 Maret 2026</span>
+              <button class="btn btn-primary btn-sm" onclick="showPage('login')">Buka Dashboard Penuh</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BERITA -->
+  <section class="section" id="berita" style="background:var(--white)">
+    <div class="section-inner">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px" class="reveal">
+        <div><div class="section-tag">Warta Sekolah</div><h2 class="section-title">Berita Terkini</h2></div>
+        <button class="btn btn-outline btn-sm" onclick="showPage('news-detail')">Lihat Semua →</button>
+      </div>
+      <div class="grid-3">
+        <div class="news-card reveal stagger-1" onclick="openNewsDetail(0)">
+          <div class="news-thumb"><div class="news-thumb-img" style="background:linear-gradient(135deg,var(--verd-4),var(--primary-light))"></div><div class="news-cat">Milad</div><svg width="52" height="52" viewBox="0 0 24 24" fill="none" style="position:relative;z-index:1;opacity:.25"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" stroke="white" stroke-width="1.5" fill="white"/></svg></div>
+          <div class="news-body"><div class="news-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg> 18 Nov 2024 · Redaksi</div><div class="news-title">Lomba Milad Muhammadiyah ke-112: Semarak Prestasi Siswa</div><div class="news-excerpt">Sekolah menyelenggarakan rangkaian lomba bertajuk "Membangun Generasi Unggul dan Berkemajuan".</div><div class="news-tags"><span class="news-tag">#MiladMuhammadiyah112</span><span class="news-tag">#Prestasi</span></div></div>
+        </div>
+        <div class="news-card reveal stagger-2" onclick="openNewsDetail(1)">
+          <div class="news-thumb"><div class="news-thumb-img" style="background:linear-gradient(135deg,var(--verd-4),var(--primary))"></div><div class="news-cat">Inovasi</div><svg width="52" height="52" viewBox="0 0 24 24" fill="none" style="position:relative;z-index:1;opacity:.25"><rect x="2" y="3" width="20" height="14" rx="2" stroke="white" stroke-width="1.5"/></svg></div>
+          <div class="news-body"><div class="news-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg> 5 jam lalu · Tim Digital</div><div class="news-title">Workshop Robotik: Masa Depan di Tangan Siswa Muhammadiyah</div><div class="news-excerpt">Inovasi teknologi ramah lingkungan karya siswa dipamerkan dalam kompetisi tingkat nasional.</div><div class="news-tags"><span class="news-tag">#Inovasi</span><span class="news-tag">#Teknologi</span></div></div>
+        </div>
+        <div class="news-card reveal stagger-3" onclick="openNewsDetail(2)">
+          <div class="news-thumb"><div class="news-thumb-img" style="background:linear-gradient(135deg,var(--verd-3),var(--primary-light))"></div><div class="news-cat">Prestasi</div><svg width="52" height="52" viewBox="0 0 24 24" fill="none" style="position:relative;z-index:1;opacity:.25"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" stroke="white" stroke-width="1.5" fill="white"/></svg></div>
+          <div class="news-body"><div class="news-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg> 2 jam lalu · Redaksi</div><div class="news-title">Juara Umum Lomba Tahfidz Tingkat Provinsi Jawa Barat</div><div class="news-excerpt">Siswa Muhammadiyah menorehkan prestasi gemilang dalam lomba hafalan Al-Qur'an tingkat provinsi.</div><div class="news-tags"><span class="news-tag">#Tahfidz</span><span class="news-tag">#Hafalan</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TENTANG -->
+  <section class="section" id="tentang" style="background:var(--surface)">
+    <div class="section-inner">
+      <div class="grid-2" style="gap:64px">
+        <div class="reveal-left">
+          <div class="section-tag">Tentang Kami</div>
+          <h2 class="section-title">Jejak Langkah &amp; Sejarah</h2>
+          <p style="color:var(--text-muted);line-height:1.8;font-size:.9rem;margin-bottom:14px">Berakar dari semangat K.H. Ahmad Dahlan untuk mencerdaskan umat melalui pendidikan Islam yang modern, sekolah ini didirikan dengan tujuan menyatukan ilmu agama dan pengetahuan umum secara seimbang.</p>
+          <p style="color:var(--text-muted);line-height:1.8;font-size:.9rem;margin-bottom:24px">Dimulai dari gedung sederhana, kini kami telah berkembang menjadi institusi pendidikan rujukan yang mengintegrasikan kurikulum nasional dengan kurikulum khas Muhammadiyah.</p>
+          <div class="grid-3" style="gap:12px;margin-bottom:24px">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;transition:all .3s ease" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform='translateY(0)'"><div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--primary)">1984</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:3px">Tahun Pendirian</div></div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;transition:all .3s ease" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform='translateY(0)'"><div class="counter-num" data-target="5000" data-suffix="+" style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--primary)">5,000+</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:3px">Alumni</div></div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;transition:all .3s ease" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform='translateY(0)'"><div class="counter-num" data-target="1240" data-suffix="+" style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--primary)">1,240+</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:3px">Siswa Aktif</div></div>
+          </div>
+          <div style="background:var(--white);border-left:4px solid var(--copper);border-radius:0 10px 10px 0;padding:16px 18px">
+            <p style="font-style:italic;font-size:.88rem;line-height:1.7;margin-bottom:8px">"Pendidikan bukan hanya sekadar mengisi wadah kosong dengan pengetahuan, melainkan menyalakan api semangat perjuangan dan akhlak mulia."</p>
+            <div style="font-weight:700;font-size:.82rem;color:var(--primary)">Dr. H. Ahmad Fauzan, M.Pd.</div>
+            <div style="font-size:.75rem;color:var(--text-muted)">Kepala Sekolah</div>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+            <div style="background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:20px;text-align:center;transition:all .3s ease;cursor:default" onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='var(--sh-lg)'" onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow=''">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>
+              <div style="font-weight:700;margin-bottom:5px">Religius</div><div style="font-size:.78rem;color:var(--text-muted)">Menjunjung nilai-nilai keislaman dalam setiap aspek kehidupan</div>
+            </div>
+            <div style="background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:20px;text-align:center;transition:all .3s ease;cursor:default" onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='var(--sh-lg)'" onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow=''">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3M6.343 6.343l-.707-.707M12 17c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5z" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div style="font-weight:700;margin-bottom:5px">Inovatif</div><div style="font-size:.78rem;color:var(--text-muted)">Selalu berkembang dan beradaptasi dengan perubahan zaman</div>
+            </div>
+            <div style="background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:20px;text-align:center;transition:all .3s ease;cursor:default" onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='var(--sh-lg)'" onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow=''">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="white" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="white" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div style="font-weight:700;margin-bottom:5px">Kolaboratif</div><div style="font-size:.78rem;color:var(--text-muted)">Membangun sinergi siswa, guru, dan orang tua</div>
+            </div>
+            <div style="background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:20px;text-align:center;transition:all .3s ease;cursor:default" onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='var(--sh-lg)'" onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow=''">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>
+              <div style="font-weight:700;margin-bottom:5px">Integritas</div><div style="font-size:.78rem;color:var(--text-muted)">Menjaga kepercayaan dengan kejujuran dan tanggung jawab</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="bantuan" style="background:var(--white)">
+    <div class="section-inner">
+      <div class="grid-2" style="gap:64px">
+        <div class="reveal-left">
+          <div class="section-tag">Pusat Bantuan</div>
+          <h2 class="section-title">Pertanyaan Umum</h2>
+          <p style="color:var(--text-muted);margin-bottom:24px;font-size:.9rem;line-height:1.7">Temukan jawaban seputar sistem akademik, karakter digital, dan administrasi sekolah.</p>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:20px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="var(--text-muted)" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="faqSearch" type="text" placeholder="Cari pertanyaan..." style="border:none;outline:none;font-size:.875rem;font-family:inherit;flex:1;background:transparent;color:var(--text)" oninput="filterFAQ(this.value)">
+          </div>
+          <div style="background:linear-gradient(135deg,var(--verd-3),var(--primary));border-radius:var(--r);padding:22px;color:#fff">
+            <div style="font-weight:700;margin-bottom:6px">Masih butuh bantuan?</div>
+            <div style="font-size:.82rem;opacity:.8;margin-bottom:14px">Tim dukungan kami siap membantu.</div>
+            <div style="display:flex;gap:8px">
+              <button onclick="showToast('Menghubungi tim support...','info')" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 16px;border-radius:7px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s" onmouseenter="this.style.background='rgba(255,255,255,.25)'" onmouseleave="this.style.background='rgba(255,255,255,.15)'">Chat Sekarang</button>
+              <button onclick="showToast('Menghubungi call center...','info')" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 16px;border-radius:7px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s" onmouseenter="this.style.background='rgba(255,255,255,.25)'" onmouseleave="this.style.background='rgba(255,255,255,.15)'">021-1234-5678</button>
+            </div>
+          </div>
+        </div>
+        <div id="faqList" class="reveal-right">
+          <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)">Bagaimana cara melihat nilai ujian di Portal Siswa?<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="faq-a">Masuk ke Portal Akademik, pilih menu 'Akademik' lalu klik 'Rapor &amp; Nilai'. Nilai akan muncul setelah masa verifikasi guru selesai.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)">Apa yang harus dilakukan jika lupa kata sandi?<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="faq-a">Klik "Lupa Password" di halaman login, masukkan email atau NISN terdaftar. Instruksi reset akan dikirim ke email Anda dalam beberapa menit.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)">Kapan batas akhir pembayaran SPP?<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="faq-a">Batas akhir pembayaran SPP adalah tanggal 10 setiap bulannya. Pembayaran dapat melalui transfer bank atau langsung ke bagian keuangan.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)">Bagaimana kebijakan penggunaan gawai di sekolah?<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="faq-a">Gawai diizinkan untuk kegiatan pembelajaran digital terstruktur. Di luar jam pelajaran, gawai disimpan di loker dan diambil saat jam pulang.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)">Bagaimana cara mendaftar sebagai siswa baru?<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="faq-a">Kunjungi halaman PPDB di portal ini, isi formulir pendaftaran online, upload dokumen yang diminta, dan tunggu konfirmasi dari pihak sekolah.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="background:var(--surface)">
+    <div class="section-inner">
+      <div class="reveal-scale" style="background:linear-gradient(135deg,var(--verd-4),var(--verd-3),var(--primary));border-radius:22px;padding:64px;text-align:center;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-50px;right:-50px;width:260px;height:260px;background:radial-gradient(circle,rgba(196,149,90,.15) 0%,transparent 70%);border-radius:50%"></div>
+        <div style="position:absolute;bottom:-60px;left:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(126,200,168,.1) 0%,transparent 70%);border-radius:50%"></div>
+        <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none"></div>
+        <div class="section-tag" style="color:rgba(224,184,122,.9);text-align:center;display:block;position:relative">PPDB 2026/2027</div>
+        <h2 style="color:#fff;font-size:2.4rem;margin:8px 0 14px;position:relative">Siap Bergabung dengan Keluarga Besar Kami?</h2>
+        <p style="color:rgba(255,255,255,.75);max-width:480px;margin:0 auto 32px;font-size:.9rem;line-height:1.7;position:relative">Pendaftaran Peserta Didik Baru telah dibuka. Raih masa depan gemilang bersama kami.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative">
+          <button class="btn btn-accent btn-lg" onclick="showModal('ppdbModal')">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Daftar Sekarang
+          </button>
+          <button class="btn btn-outline btn-lg" style="color:#fff;border-color:rgba(255,255,255,.35)" onclick="showToast('Mengunduh brosur...','success')">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Unduh Brosur
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><div style="width:34px;height:34px;background:linear-gradient(135deg,var(--copper),var(--copper-light));border-radius:9px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div><span class="footer-brand-name">Muhammadiyah Digital</span></div>
+        <div class="footer-desc">Mewujudkan pendidikan Islam yang unggul, modern, dan berkemajuan dengan mengintegrasikan nilai-nilai luhur dan teknologi digital.</div>
+        <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgba(255,255,255,.5)" stroke-width="2"/><polyline points="22,6 12,13 2,6" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="60090e060f200d1508010d0d0104091901084e1303084e0904">[email&#160;protected]</a></div>
+        <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.5 18a19.45 19.45 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> +62 (21) 1234 5678</div>
+      </div>
+      <div><h4>Tautan Cepat</h4><ul class="footer-links"><li><a onclick="showPage('login')">Portal Siswa</a></li><li><a onclick="showPage('login')">E-Learning</a></li><li><a onclick="scrollToSection('fitur')">Fitur Karakter</a></li><li><a onclick="showModal('ppdbModal')">PPDB 2026</a></li></ul></div>
+      <div><h4>Informasi</h4><ul class="footer-links"><li><a onclick="scrollToSection('tentang')">Tentang Kami</a></li><li><a onclick="scrollToSection('berita')">Berita</a></li><li><a onclick="scrollToSection('bantuan')">FAQ</a></li><li><a>Kebijakan Privasi</a></li></ul></div>
+      <div><h4>Hubungi Kami</h4><ul class="footer-links"><li><a>WhatsApp: 0812-3456-7890</a></li><li><a>Email: <span class="__cf_email__" data-cfemail="4821262e2708253d203b2b2066212c">[email&#160;protected]</span></a></li><li><a>Call Center: 021-1234-5678</a></li><li><a>Jam: 07.00 – 16.00 WIB</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Pimpinan Pusat Muhammadiyah · All rights reserved</span><span>Daily Akhlak Quest · Platform Karakter Digital</span></div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: LOGIN
+═══════════════════════════════════════════ -->
+<div id="page-login" class="page">
+  <div class="login-page">
+    <div class="login-wrap">
+      <div>
+        <div style="cursor:pointer;margin-bottom:28px" onclick="showPage('landing')">
+          <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.7);font-size:.85rem;margin-bottom:20px;transition:color .2s" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,.7)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali ke Beranda
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div style="width:42px;height:42px;background:linear-gradient(135deg,var(--copper),var(--copper-light));border-radius:12px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div><div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;font-weight:700">Muhammadiyah Digital</div></div>
+        </div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:2rem;color:#fff;margin-bottom:14px;line-height:1.2">Portal Digital Pendidikan Berkemajuan</h2>
+        <p style="color:rgba(255,255,255,.7);font-size:.9rem;line-height:1.7;margin-bottom:24px">Akses semua layanan akademik, karakter digital, dan administrasi dalam satu platform terintegrasi.</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;color:rgba(255,255,255,.75)"><div style="width:28px;height:28px;background:rgba(196,149,90,.2);border-radius:7px;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--copper-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Daily Akhlak Quest — Misi interaktif harian</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;color:rgba(255,255,255,.75)"><div style="width:28px;height:28px;background:rgba(196,149,90,.2);border-radius:7px;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--copper-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Leaderboard &amp; Sistem Poin XP</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;color:rgba(255,255,255,.75)"><div style="width:28px;height:28px;background:rgba(196,149,90,.2);border-radius:7px;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--copper-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Tilawah Al-Qur'an Digital &amp; Hafalan</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;color:rgba(255,255,255,.75)"><div style="width:28px;height:28px;background:rgba(196,149,90,.2);border-radius:7px;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--copper-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Laporan otomatis ke orang tua</div>
+        </div>
+      </div>
+      <div class="login-card">
+        <h3 style="font-size:1.4rem;margin-bottom:6px">Masuk ke Akun Anda</h3>
+        <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:20px">Pilih peran Anda untuk melanjutkan</p>
+        <div class="role-grid">
+          <div class="role-btn active" onclick="selectRole(this,'Siswa')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="var(--primary)" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="var(--primary)" stroke-width="2"/></svg>
+            <div class="role-btn-label">Siswa</div>
+          </div>
+          <div class="role-btn" onclick="selectRole(this,'Guru')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="var(--text-muted)" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="var(--text-muted)" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"/></svg>
+            <div class="role-btn-label">Guru</div>
+          </div>
+          <div class="role-btn" onclick="selectRole(this,'Orang Tua')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="var(--text-muted)" stroke-width="2"/><polyline points="9,22 9,12 15,12 15,22" stroke="var(--text-muted)" stroke-width="2"/></svg>
+            <div class="role-btn-label">Orang Tua</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">User ID / NISN</label>
+          <input id="loginId" class="form-input" type="text" placeholder="Masukkan nomor identitas Anda" value="2024001">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="display:flex;justify-content:space-between"><span>Password</span><a href="#" onclick="showModal('forgotModal');return false" style="color:var(--primary);font-size:.78rem;text-decoration:none;font-weight:500">Lupa Password?</a></label>
+          <div style="position:relative">
+            <input id="loginPass" class="form-input" type="password" placeholder="••••••••" value="demo123" style="padding-right:44px">
+            <button onclick="togglePwd()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px" id="eyeBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" id="eyeIcon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+          </div>
+        </div>
+        <label class="form-check" style="margin-bottom:18px"><input type="checkbox" checked><span style="font-size:.83rem;color:var(--text-muted)">Remember me for 30 days</span></label>
+        <button class="btn btn-primary btn-full btn-lg" onclick="doLogin()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Masuk ke Portal
+        </button>
+        <p style="text-align:center;font-size:.78rem;color:var(--text-muted);margin-top:14px">Demo: ID apapun + password apapun ✓</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: DASHBOARD
+═══════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <nav class="navbar">
+    <a class="brand" onclick="showPage('dashboard')">
+      <div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      SMA MUHAMMADIYAH 1 GRESIK
+    </a>
+    <div class="nav-links">
+      <button class="btn btn-ghost" style="color:rgba(255,255,255,.8);position:relative" onclick="showPage('notif')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span style="position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid var(--verd-4)"></span>
+      </button>
+      <button class="btn btn-ghost" style="color:rgba(255,255,255,.8)" onclick="showPage('profile')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
+        Ahmad Fauzi
+      </button>
+      <button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.6)" onclick="showPage('landing')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Keluar
+      </button>
+    </div>
+  </nav>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">Menu Utama</div>
+      <a class="active" onclick="showDashSection('home')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2"/></svg><span>Beranda</span></a>
+      <a onclick="showDashSection('misi')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Misi Harian</span><span class="sidebar-badge">3</span></a>
+      <a onclick="showDashSection('leaderboard')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4M12 21V9M4 12V5a1 1 0 0 1 1-1h3M20 12V5a1 1 0 0 0-1-1h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Leaderboard</span></a>
+      <div class="sidebar-section">Ibadah &amp; Literasi</div>
+      <a onclick="showDashSection('shalat')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Jadwal Shalat</span></a>
+      <a onclick="showDashSection('quran')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="2"/></svg><span>Tilawah Qur'an</span></a>
+      <div class="sidebar-section">Akademik</div>
+      <a onclick="showDashSection('kalender')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg><span>Kalender</span></a>
+      <a onclick="showPage('notif')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Notifikasi</span><span class="sidebar-badge">5</span></a>
+      <a onclick="showPage('profile')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Profil Saya</span></a>
+      <a onclick="showPage('settings')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2"/></svg><span>Pengaturan</span></a>
+    </aside>
+    <main class="main-content" id="dashMain">
+      <!-- HOME SECTION -->
+      <div id="dash-home" class="anim-fade">
+        <div class="xp-section">
+          <div class="xp-top"><div><div class="xp-level">Level 12: Mujahid</div><div style="font-size:.78rem;opacity:.65;margin-top:2px">Ahmad Fauzi · Kelas 8A · SMP Muhammadiyah</div></div><div style="text-align:right"><div style="font-size:1.4rem;font-weight:800;color:var(--copper-light)">2,450</div><div style="font-size:.72rem;opacity:.6">Total XP</div></div></div>
+          <div class="xp-track"><div class="xp-fill" style="width:82%"></div></div>
+          <div class="xp-labels"><span>1,240 / 1,500 XP</span><span>82% → Level 13</span></div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" stroke="var(--success)" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="stat-val" style="color:var(--primary)">2,450</div><div class="stat-lbl">Total Poin XP</div><div class="stat-trend up">↑ +125 hari ini</div></div></div>
+          <div class="stat-card"><div class="stat-icon gold"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a9 9 0 1 0 0 18A9 9 0 0 0 12 2zm0 4v5l3 3" stroke="var(--copper)" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="stat-val" style="color:var(--primary)">14</div><div class="stat-lbl">Hari Streak</div><div class="stat-trend up">↑ Terjaga!</div></div></div>
+          <div class="stat-card"><div class="stat-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4M12 21V9M4 12V5a1 1 0 0 1 1-1h3M20 12V5a1 1 0 0 0-1-1h-3" stroke="var(--info)" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="stat-val" style="color:var(--primary)">#4</div><div class="stat-lbl">Peringkat Global</div><div class="stat-trend up">↑ Naik 2 posisi</div></div></div>
+          <div class="stat-card"><div class="stat-icon red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="var(--danger)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="var(--danger)" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="stat-val" style="color:var(--primary)">0/3</div><div class="stat-lbl">Misi Hari Ini</div><div class="stat-trend" style="color:var(--warn)">3 misi tersisa</div></div></div>
+        </div>
+        <div class="grid-2" style="gap:20px">
+          <div class="card">
+            <div class="card-header"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/></svg>Misi Aktif Hari Ini</h3><button class="btn btn-primary btn-sm" onclick="showDashSection('misi')">Lihat Semua</button></div>
+            <div class="card-body" style="padding:10px 14px">
+              <div class="check-item" onclick="completeTask(this,50,'Shalat Tepat Waktu')"><div class="check-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-text"><strong>Shalat Dzuhur Berjamaah</strong><br>Check-in di masjid sekolah</div><span class="badge badge-success">+50</span></div>
+              <div class="check-item" onclick="completeTask(this,30,'Tilawah Al-Quran')"><div class="check-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-text"><strong>Tilawah 1 Halaman</strong><br>Lanjutkan dari Al-Baqarah ayat 45</div><span class="badge badge-accent">+30</span></div>
+              <div class="check-item" onclick="completeTask(this,45,'Adab Berbakti')"><div class="check-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-text"><strong>Berbakti kepada Orang Tua</strong><br>Membantu pekerjaan rumah</div><span class="badge badge-info">+45</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 17l4-8 4 4 4-6 4 4" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Statistik Karakter</h3><span class="badge badge-primary">+12% minggu ini</span></div>
+            <div class="card-body">
+              <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Kedisiplinan</span><span class="progress-val">92%</span></div><div class="progress-track"><div class="progress-fill animated-bar" data-width="92"></div></div></div>
+              <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Ibadah Harian</span><span class="progress-val">85%</span></div><div class="progress-track"><div class="progress-fill animated-bar" data-width="85"></div></div></div>
+              <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Adab &amp; Sosial</span><span class="progress-val">78%</span></div><div class="progress-track"><div class="progress-fill gold animated-bar" data-width="78"></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2" style="gap:20px;margin-top:20px">
+          <div class="card">
+            <div class="card-header"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4M12 21V9M4 12V5a1 1 0 0 1 1-1h3M20 12V5a1 1 0 0 0-1-1h-3" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/></svg>Top Leaderboard</h3><button class="btn btn-ghost btn-sm" onclick="showDashSection('leaderboard')">Lihat Semua →</button></div>
+            <div class="card-body" style="padding:8px">
+              <div class="lb-row"><div class="lb-rank r1">1</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--primary),var(--primary-light))">ZA</div><div class="lb-info"><div class="lb-name">Zaidan Al-Fatih</div><div class="lb-sub">Kelas 9A</div></div><div class="lb-xp">4,820 XP</div></div>
+              <div class="lb-row"><div class="lb-rank r2">2</div><div class="lb-avatar" style="background:linear-gradient(135deg,#2475A8,#3A98CC)">SK</div><div class="lb-info"><div class="lb-name">Siti Khadijah</div><div class="lb-sub">Kelas 8B</div></div><div class="lb-xp">4,650 XP</div></div>
+              <div class="lb-row"><div class="lb-rank r3">3</div><div class="lb-avatar" style="background:linear-gradient(135deg,#6B4A9A,#8B65C8)">OB</div><div class="lb-info"><div class="lb-name">Omar Bakrie</div><div class="lb-sub">Kelas 9C</div></div><div class="lb-xp">4,100 XP</div></div>
+              <div class="lb-row highlight"><div class="lb-rank rn">4</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--copper),var(--copper-light))">AF</div><div class="lb-info"><div class="lb-name">Ahmad Fauzi (Kamu)</div><div class="lb-sub">Kelas 8A</div></div><div class="lb-xp">2,450 XP</div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="quote-box">
+              <div class="quote-text">"Ridha Allah terletak pada ridha kedua orang tua, dan murka Allah terletak pada kemurkaan orang tua."</div>
+              <div class="quote-src">— HR. Tirmidzi</div>
+            </div>
+            <div class="card" style="padding:16px">
+              <div style="font-weight:700;font-size:.85rem;margin-bottom:10px;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--copper)" stroke-width="2"/><path d="M12 6v6l3 3" stroke="var(--copper)" stroke-width="2" stroke-linecap="round"/></svg>Jadwal Shalat Hari Ini</div>
+              <div class="prayer-item active"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--copper)"/></svg>Dzuhur <span style="background:linear-gradient(135deg,var(--copper),var(--copper-light));color:var(--verd-4);padding:1px 7px;border-radius:4px;font-size:.65rem;font-weight:700">SEKARANG</span></div><div class="prayer-time active">12:05</div></div>
+              <div class="prayer-item"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--border)"/></svg>Ashar</div><div class="prayer-time">15:18</div></div>
+              <div class="prayer-item"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--border)"/></svg>Maghrib</div><div class="prayer-time">18:12</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISI SECTION -->
+      <div id="dash-misi" style="display:none">
+        <div style="margin-bottom:22px"><h2 style="font-size:1.5rem;margin-bottom:4px">Misi Harian</h2><p style="color:var(--text-muted);font-size:.875rem">Selesaikan misi untuk mendapatkan poin XP dan membangun karakter mulia</p></div>
+        <div class="tabs">
+          <button class="tab active" onclick="filterMisi(this,'semua')">Semua Misi</button>
+          <button class="tab" onclick="filterMisi(this,'spiritual')">Spiritual</button>
+          <button class="tab" onclick="filterMisi(this,'literasi')">Literasi</button>
+          <button class="tab" onclick="filterMisi(this,'sosial')">Sosial</button>
+        </div>
+        <div class="grid-3" id="misiGrid">
+          <div class="mission-card green" data-cat="spiritual"><div class="mission-icon-wrap" style="background:rgba(30,158,94,.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--success)" stroke-width="2"/><path d="M12 6v6l4 2" stroke="var(--success)" stroke-width="2" stroke-linecap="round"/></svg></div><div class="mission-pts"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="var(--primary)"/></svg>+50 Poin</div><div class="mission-title">Shalat Dzuhur Berjamaah</div><div class="mission-desc">Laksanakan shalat Dzuhur berjamaah di masjid sekolah. Tegakkan tiang agama bersama.</div><button class="btn btn-success btn-sm" onclick="ambilMisi(this,50,'Shalat Dzuhur Berjamaah')">Ambil Misi</button></div>
+          <div class="mission-card gold" data-cat="literasi"><div class="mission-icon-wrap" style="background:rgba(196,149,90,.12)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="var(--copper)" stroke-width="2"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="var(--copper)" stroke-width="2"/></svg></div><div class="mission-pts"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="var(--primary)"/></svg>+30 Poin</div><div class="mission-title">Tilawah Al-Qur'an Harian</div><div class="mission-desc">Membaca minimal 1 halaman Al-Qur'an dengan tartil dan memahami maknanya.</div><button class="btn btn-primary btn-sm" onclick="ambilMisi(this,30,'Tilawah Al-Quran')">Ambil Misi</button></div>
+          <div class="mission-card blue" data-cat="sosial"><div class="mission-icon-wrap" style="background:rgba(36,117,168,.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="var(--info)" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="var(--info)" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="var(--info)" stroke-width="2" stroke-linecap="round"/></svg></div><div class="mission-pts"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="var(--primary)"/></svg>+45 Poin</div><div class="mission-title">Adab Berbakti Kepada Orang Tua</div><div class="mission-desc">Membantu orang tua atau guru dengan ikhlas tanpa diminta hari ini.</div><button class="btn btn-primary btn-sm" onclick="ambilMisi(this,45,'Adab Berbakti')">Ambil Misi</button></div>
+          <div class="mission-card green" data-cat="spiritual"><div class="mission-icon-wrap" style="background:rgba(30,158,94,.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="var(--success)" stroke-width="2"/></svg></div><div class="mission-pts"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="var(--primary)"/></svg>+40 Poin</div><div class="mission-title">Doa Sebelum dan Sesudah Belajar</div><div class="mission-desc">Biasakan memulai dan mengakhiri belajar dengan doa agar ilmu berkah.</div><button class="btn btn-primary btn-sm" onclick="ambilMisi(this,40,'Doa Belajar')">Ambil Misi</button></div>
+          <div class="mission-card gold" data-cat="literasi"><div class="mission-icon-wrap" style="background:rgba(196,149,90,.12)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" stroke="var(--copper)" stroke-width="2"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" stroke="var(--copper)" stroke-width="2"/></svg></div><div class="mission-pts"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="var(--primary)"/></svg>+35 Poin</div><div class="mission-title">Hafalan Surat Pendek</div><div class="mission-desc">Hafalkan 1 surat pendek atau tambah minimal 3 ayat hafalan Al-Qur'an.</div><button class="btn btn-primary btn-sm" onclick="ambilMisi(this,35,'Hafalan Surat')">Ambil Misi</button></div>
+          <div class="mission-card red" data-cat="sosial"><div class="mission-icon-wrap" style="background:#fdf0ef"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="var(--danger)" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="mission-pts"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="var(--primary)"/></svg>+25 Poin</div><div class="mission-title">Berbagi Kebaikan</div><div class="mission-desc">Lakukan satu kebaikan kepada teman — berikan semangat atau bantu kesulitannya.</div><button class="btn btn-primary btn-sm" onclick="ambilMisi(this,25,'Berbagi Kebaikan')">Ambil Misi</button></div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD SECTION -->
+      <div id="dash-leaderboard" style="display:none">
+        <div style="margin-bottom:22px"><h2 style="font-size:1.5rem;margin-bottom:4px">Leaderboard</h2><p style="color:var(--text-muted);font-size:.875rem">Fastabiqul Khairat — Berlomba dalam kebaikan</p></div>
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(this,'lb-global')">Global</button>
+          <button class="tab" onclick="switchTab(this,'lb-kelas')">Per Kelas</button>
+          <button class="tab" onclick="switchTab(this,'lb-mingguan')">Mingguan</button>
+        </div>
+        <div id="lb-global">
+          <div class="card"><div class="card-body" style="padding:8px">
+            <div class="lb-row"><div class="lb-rank r1">1</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--primary),var(--primary-light))">ZA</div><div class="lb-info"><div class="lb-name">Zaidan Al-Fatih</div><div class="lb-sub">Kelas 9A · Streak 21 hari</div></div><div class="lb-xp">4,820 XP</div></div>
+            <div class="lb-row"><div class="lb-rank r2">2</div><div class="lb-avatar" style="background:linear-gradient(135deg,#2475A8,#3A98CC)">SK</div><div class="lb-info"><div class="lb-name">Siti Khadijah</div><div class="lb-sub">Kelas 8B · Streak 18 hari</div></div><div class="lb-xp">4,650 XP</div></div>
+            <div class="lb-row"><div class="lb-rank r3">3</div><div class="lb-avatar" style="background:linear-gradient(135deg,#6B4A9A,#8B65C8)">OB</div><div class="lb-info"><div class="lb-name">Omar Bakrie</div><div class="lb-sub">Kelas 9C · Streak 15 hari</div></div><div class="lb-xp">4,100 XP</div></div>
+            <div class="lb-row"><div class="lb-rank rn">4</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--copper),var(--copper-light))">FZ</div><div class="lb-info"><div class="lb-name">Fatimah Zahra</div><div class="lb-sub">Kelas 7A · Streak 12 hari</div></div><div class="lb-xp">3,890 XP</div></div>
+            <div class="lb-row highlight"><div class="lb-rank rn">5</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--copper),var(--copper-light))">AF</div><div class="lb-info"><div class="lb-name">Ahmad Fauzi (Kamu)</div><div class="lb-sub">Kelas 8A · Streak 14 hari</div></div><div class="lb-xp">2,450 XP</div></div>
+            <div class="lb-row"><div class="lb-rank rn">6</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--success),#27C475)">MA</div><div class="lb-info"><div class="lb-name">Muhammad Azzam</div><div class="lb-sub">Kelas 9B · Streak 9 hari</div></div><div class="lb-xp">2,280 XP</div></div>
+          </div></div>
+        </div>
+        <div id="lb-kelas" style="display:none">
+          <div class="card"><div class="card-header"><h3>Leaderboard Kelas 8A</h3></div><div class="card-body" style="padding:8px">
+            <div class="lb-row highlight"><div class="lb-rank r1">1</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--copper),var(--copper-light))">AF</div><div class="lb-info"><div class="lb-name">Ahmad Fauzi (Kamu)</div><div class="lb-sub">Streak 14 hari</div></div><div class="lb-xp">2,450 XP</div></div>
+            <div class="lb-row"><div class="lb-rank r2">2</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--success),#27C475)">BI</div><div class="lb-info"><div class="lb-name">Bilal Ibrahim</div><div class="lb-sub">Streak 10 hari</div></div><div class="lb-xp">2,200 XP</div></div>
+            <div class="lb-row"><div class="lb-rank r3">3</div><div class="lb-avatar" style="background:linear-gradient(135deg,#6B4A9A,#8B65C8)">NA</div><div class="lb-info"><div class="lb-name">Nur Aisyah</div><div class="lb-sub">Streak 8 hari</div></div><div class="lb-xp">1,980 XP</div></div>
+          </div></div>
+        </div>
+        <div id="lb-mingguan" style="display:none">
+          <div class="card"><div class="card-header"><h3>Top Perolehan XP — Minggu Ini</h3><span class="badge badge-accent">03 — 09 Mar 2026</span></div><div class="card-body" style="padding:8px">
+            <div class="lb-row highlight"><div class="lb-rank r1">1</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--copper),var(--copper-light))">AF</div><div class="lb-info"><div class="lb-name">Ahmad Fauzi (Kamu)</div><div class="lb-sub">Kelas 8A · 7 hari aktif</div></div><div class="lb-xp">+425 XP</div></div>
+            <div class="lb-row"><div class="lb-rank r2">2</div><div class="lb-avatar" style="background:linear-gradient(135deg,var(--primary),var(--primary-light))">ZA</div><div class="lb-info"><div class="lb-name">Zaidan Al-Fatih</div><div class="lb-sub">Kelas 9A · 7 hari aktif</div></div><div class="lb-xp">+390 XP</div></div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- SHALAT SECTION -->
+      <div id="dash-shalat" style="display:none">
+        <div style="margin-bottom:22px"><h2 style="font-size:1.5rem;margin-bottom:4px">Jadwal Shalat</h2><p style="color:var(--text-muted);font-size:.875rem">Senin, 9 Maret 2026 · Jakarta, Indonesia</p></div>
+        <div class="grid-2" style="gap:20px">
+          <div class="card">
+            <div class="card-header"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--primary)" stroke-width="2"/><path d="M12 6v6l4 2" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/></svg>Waktu Shalat Hari Ini</h3><span class="badge badge-success">Jakarta</span></div>
+            <div class="card-body">
+              <div class="prayer-item"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--border)"/></svg>Subuh</div><div class="prayer-time">04:32</div></div>
+              <div class="prayer-item"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--border)"/></svg>Syuruq</div><div class="prayer-time">05:48</div></div>
+              <div class="prayer-item active"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--copper)"/></svg>Dzuhur <span style="background:linear-gradient(135deg,var(--copper),var(--copper-light));color:var(--verd-4);padding:1px 8px;border-radius:4px;font-size:.65rem;font-weight:700">SEKARANG</span></div><div class="prayer-time active">12:05</div></div>
+              <div class="prayer-item"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--border)"/></svg>Ashar</div><div class="prayer-time">15:18</div></div>
+              <div class="prayer-item"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--border)"/></svg>Maghrib</div><div class="prayer-time">18:12</div></div>
+              <div class="prayer-item"><div class="prayer-name"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--border)"/></svg>Isya</div><div class="prayer-time">19:24</div></div>
+              <div style="margin-top:14px;background:rgba(46,139,107,.08);border-radius:9px;padding:12px 14px;font-size:.82rem;color:var(--text-muted)">
+                Shalat berjamaah di Masjid Sekolah memberikan bonus +10 XP tambahan!
+              </div>
+            </div>
+            <div class="card-footer"><button class="btn btn-primary btn-full" onclick="checkinShalat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Check-in Shalat Dzuhur Berjamaah</button></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Rekap Shalat Minggu Ini</h3></div>
+            <div class="card-body">
+              <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>Hari</th><th>Subuh</th><th>Dzuhur</th><th>Ashar</th><th>Maghrib</th><th>Isya</th></tr></thead>
+                <tbody>
+                  <tr><td style="font-weight:600">Sen</td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="var(--copper)" stroke-width="2"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td></tr>
+                  <tr><td style="font-weight:600">Sel</td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td></tr>
+                  <tr><td style="font-weight:600">Rab</td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="var(--danger)" stroke-width="2" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td><td><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></td></tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QURAN SECTION -->
+      <div id="dash-quran" style="display:none">
+        <div style="margin-bottom:22px"><h2 style="font-size:1.5rem;margin-bottom:4px">Tilawah Al-Qur'an</h2><p style="color:var(--text-muted);font-size:.875rem">Target harian: 1 halaman · Progress hari ini: 0/1 hal</p></div>
+        <div class="grid-2" style="gap:20px">
+          <div class="card">
+            <div class="card-header"><h3>Daftar Surah</h3>
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-ghost btn-sm" onclick="filterSurah('makkiah')" style="font-size:.75rem">Makkiah</button>
+                <button class="btn btn-ghost btn-sm" onclick="filterSurah('madaniah')" style="font-size:.75rem">Madaniah</button>
+              </div>
+            </div>
+            <div class="card-body" style="padding:4px 8px;max-height:400px;overflow-y:auto" id="surahList">
+              <div class="surah-row" data-type="makkiah" onclick="openSurahDetail(1,'Al-Fatihah',7,'Makkiah')"><div class="surah-num">1</div><div class="surah-info"><div class="surah-name">Al-Fatihah</div><div class="surah-detail">7 Ayat · Makkiah</div></div><div class="surah-arabic">الفاتحة</div><button class="btn btn-primary btn-sm">Mulai</button></div>
+              <div class="surah-row" data-type="madaniah" onclick="openSurahDetail(2,'Al-Baqarah',286,'Madaniah')"><div class="surah-num">2</div><div class="surah-info"><div class="surah-name">Al-Baqarah</div><div class="surah-detail">286 Ayat · Madaniah</div></div><div class="surah-arabic">البقرة</div><button class="btn btn-primary btn-sm">Mulai</button></div>
+              <div class="surah-row" data-type="makkiah" onclick="openSurahDetail(112,'Al-Ikhlas',4,'Makkiah')"><div class="surah-num">112</div><div class="surah-info"><div class="surah-name">Al-Ikhlas</div><div class="surah-detail">4 Ayat · Makkiah</div></div><div class="surah-arabic">الإخلاص</div><button class="btn btn-primary btn-sm">Mulai</button></div>
+              <div class="surah-row" data-type="makkiah" onclick="openSurahDetail(113,'Al-Falaq',5,'Makkiah')"><div class="surah-num">113</div><div class="surah-info"><div class="surah-name">Al-Falaq</div><div class="surah-detail">5 Ayat · Makkiah</div></div><div class="surah-arabic">الفلق</div><button class="btn btn-primary btn-sm">Mulai</button></div>
+              <div class="surah-row" data-type="makkiah" onclick="openSurahDetail(114,'An-Nas',6,'Makkiah')"><div class="surah-num">114</div><div class="surah-info"><div class="surah-name">An-Nas</div><div class="surah-detail">6 Ayat · Makkiah</div></div><div class="surah-arabic">الناس</div><button class="btn btn-primary btn-sm">Mulai</button></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="card">
+              <div class="card-header"><h3>Progress Tilawah</h3></div>
+              <div class="card-body">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+                  <div style="background:var(--surface-2);border-radius:10px;padding:12px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--primary)" id="halToday">0</div><div style="font-size:.72rem;color:var(--text-muted)">Hal. Hari Ini</div></div>
+                  <div style="background:var(--surface-2);border-radius:10px;padding:12px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--primary)">12</div><div style="font-size:.72rem;color:var(--text-muted)">Total Halaman</div></div>
+                  <div style="background:var(--surface-2);border-radius:10px;padding:12px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--primary)">15</div><div style="font-size:.72rem;color:var(--text-muted)">Hari Streak</div></div>
+                </div>
+                <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Target Hari Ini</span><span class="progress-val" id="tilawahPct">0%</span></div><div class="progress-track"><div class="progress-fill gold" id="tilawahBar" style="width:0%"></div></div></div>
+                <button class="btn btn-primary btn-full" onclick="logTilawah()" style="margin-top:8px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Catat Tilawah Hari Ini
+                </button>
+              </div>
+            </div>
+            <div class="quote-box">
+              <div class="quote-text">"Sebaik-baik kalian adalah orang yang belajar Al-Qur'an dan mengajarkannya."</div>
+              <div class="quote-src">— HR. Bukhari</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KALENDER SECTION -->
+      <div id="dash-kalender" style="display:none">
+        <div style="margin-bottom:22px"><h2 style="font-size:1.5rem;margin-bottom:4px">Kalender Akademik</h2><p style="color:var(--text-muted);font-size:.875rem">Maret 2026</p></div>
+        <div class="grid-2" style="gap:20px">
+          <div class="card">
+            <div class="card-header">
+              <button class="btn btn-ghost btn-sm" onclick="prevMonth()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+              <h3 id="calTitle">Maret 2026</h3>
+              <button class="btn btn-ghost btn-sm" onclick="nextMonth()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            </div>
+            <div class="card-body">
+              <div class="cal-grid" id="calGrid" style="margin-bottom:8px">
+                <div class="cal-header-day">Min</div><div class="cal-header-day">Sen</div><div class="cal-header-day">Sel</div><div class="cal-header-day">Rab</div><div class="cal-header-day">Kam</div><div class="cal-header-day">Jum</div><div class="cal-header-day">Sab</div>
+              </div>
+              <div id="calDays" class="cal-grid"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Agenda Bulan Ini</h3></div>
+            <div class="card-body" style="padding:8px">
+              <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(30,158,94,.06);border-left:3px solid var(--success);border-radius:0 8px 8px 0;margin-bottom:10px;transition:all .2s" onmouseenter="this.style.transform='translateX(4px)'" onmouseleave="this.style.transform='translateX(0)'">
+                <div style="background:var(--success);color:#fff;border-radius:7px;padding:5px 9px;font-size:.75rem;font-weight:700;flex-shrink:0">09</div>
+                <div><div style="font-weight:700;font-size:.88rem">Hari Ini — Ujian Tengah Semester</div><div style="font-size:.78rem;color:var(--text-muted)">Semua mata pelajaran · 08:00 WIB</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(196,149,90,.06);border-left:3px solid var(--copper);border-radius:0 8px 8px 0;margin-bottom:10px;transition:all .2s" onmouseenter="this.style.transform='translateX(4px)'" onmouseleave="this.style.transform='translateX(0)'">
+                <div style="background:linear-gradient(135deg,var(--copper),var(--copper-light));color:var(--verd-4);border-radius:7px;padding:5px 9px;font-size:.75rem;font-weight:700;flex-shrink:0">15</div>
+                <div><div style="font-weight:700;font-size:.88rem">Semarak Jalan Sehat Keluarga Besar</div><div style="font-size:.78rem;color:var(--text-muted)">Lapangan Sekolah · 06:30 WIB</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(36,117,168,.06);border-left:3px solid var(--info);border-radius:0 8px 8px 0;margin-bottom:10px;transition:all .2s" onmouseenter="this.style.transform='translateX(4px)'" onmouseleave="this.style.transform='translateX(0)'">
+                <div style="background:var(--info);color:#fff;border-radius:7px;padding:5px 9px;font-size:.75rem;font-weight:700;flex-shrink:0">22</div>
+                <div><div style="font-weight:700;font-size:.88rem">Workshop Robotik &amp; Teknologi</div><div style="font-size:.78rem;color:var(--text-muted)">Lab Komputer · 09:00 WIB</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(192,57,43,.06);border-left:3px solid var(--danger);border-radius:0 8px 8px 0;transition:all .2s" onmouseenter="this.style.transform='translateX(4px)'" onmouseleave="this.style.transform='translateX(0)'">
+                <div style="background:var(--danger);color:#fff;border-radius:7px;padding:5px 9px;font-size:.75rem;font-weight:700;flex-shrink:0">28</div>
+                <div><div style="font-weight:700;font-size:.88rem">Batas Pembayaran SPP Maret</div><div style="font-size:.78rem;color:var(--text-muted)">Melalui portal keuangan</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- BOTTOM TAB BAR (mobile only) -->
+  <nav class="bottom-tab-bar">
+    <div class="bottom-tab-bar-inner">
+      <button class="bottom-tab active" id="btab-home" onclick="showDashSection('home');setActiveBottomTab('btab-home')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2"/></svg>
+        <span>Beranda</span>
+      </button>
+      <button class="bottom-tab" id="btab-misi" onclick="showDashSection('misi');setActiveBottomTab('btab-misi')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/></svg>
+        <span>Misi</span>
+        <span class="bottom-tab-badge">3</span>
+      </button>
+      <button class="bottom-tab" id="btab-quran" onclick="showDashSection('quran');setActiveBottomTab('btab-quran')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="2"/></svg>
+        <span>Qur'an</span>
+      </button>
+      <button class="bottom-tab" id="btab-lb" onclick="showDashSection('leaderboard');setActiveBottomTab('btab-lb')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4M12 21V9M4 12V5a1 1 0 0 1 1-1h3M20 12V5a1 1 0 0 0-1-1h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Rank</span>
+      </button>
+      <button class="bottom-tab" id="btab-profil" onclick="showPage('profile')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
+        <span>Profil</span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- PAGE: NOTIFIKASI -->
+<div id="page-notif" class="page" style="flex-direction:column">
+  <nav class="navbar"><a class="brand" onclick="showPage('dashboard')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
+  <div style="max-width:700px;margin:0 auto;width:100%;padding:28px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+      <div><h2 style="font-size:1.4rem;margin-bottom:3px">Notifikasi</h2><p style="color:var(--text-muted);font-size:.85rem">5 notifikasi belum dibaca</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="markAllRead()">Tandai Semua Dibaca</button>
+    </div>
+    <div id="notifList">
+      <div class="notif-item unread" onclick="this.classList.remove('unread')"><div class="notif-icon-wrap" style="background:rgba(30,158,94,.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1"><div class="notif-title">Alhamdulillah! Misi Selesai</div><div class="notif-sub">Kamu berhasil menyelesaikan misi Tilawah Al-Qur'an. +50 XP terkumpul.</div><div class="notif-time">Hari ini, 10:30 WIB</div></div><span class="badge badge-success">+50 XP</span></div>
+      <div class="notif-item unread" onclick="this.classList.remove('unread')"><div class="notif-icon-wrap" style="background:rgba(196,149,90,.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" stroke="var(--copper)" stroke-width="2" stroke-linejoin="round"/></svg></div><div style="flex:1"><div class="notif-title">Pencapaian Baru: Hafiz Muda!</div><div class="notif-sub">Kamu telah menyelesaikan 10 halaman tilawah minggu ini. Luar biasa!</div><div class="notif-time">Kemarin, 18:45 WIB</div></div><span class="badge badge-accent">Pencapaian</span></div>
+      <div class="notif-item unread" onclick="this.classList.remove('unread')"><div class="notif-icon-wrap" style="background:rgba(36,117,168,.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4M12 21V9" stroke="var(--info)" stroke-width="2" stroke-linecap="round"/></svg></div><div style="flex:1"><div class="notif-title">Kamu naik ke peringkat #4!</div><div class="notif-sub">Terus semangat! Kamu butuh 200 XP lagi untuk menyalip Omar Bakrie.</div><div class="notif-time">Kemarin, 15:22 WIB</div></div><span class="badge badge-info">Leaderboard</span></div>
+      <div class="notif-item" onclick="this.classList.remove('unread')"><div class="notif-icon-wrap" style="background:var(--surface-2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="var(--text-muted)" stroke-width="2"/></svg></div><div style="flex:1"><div class="notif-title">Laporan Mingguan Orang Tua</div><div class="notif-sub">Laporan karakter mingguan Ahmad Fauzi telah dikirimkan ke WhatsApp orang tua.</div><div class="notif-time">3 hari lalu</div></div><span class="badge badge-muted">Laporan</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: PROFIL -->
+<div id="page-profile" class="page" style="flex-direction:column">
+  <nav class="navbar"><a class="brand" onclick="showPage('dashboard')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
+  <div style="max-width:900px;margin:0 auto;width:100%;padding:28px">
+    <div class="profile-hero">
+      <div class="profile-avatar">AF</div>
+      <div style="flex:1"><div class="profile-name">Ahmad Fauzi</div><div class="profile-sub">NISN: 2024001 · Kelas 8A · SMP Muhammadiyah Jakarta</div><div class="profile-badges"><span class="profile-badge">Level 12: Mujahid</span><span class="profile-badge">Streak 14 Hari</span><span class="profile-badge">Hafiz Muda</span></div></div>
+      <div style="text-align:right"><div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--copper-light)">2,450</div><div style="font-size:.75rem;opacity:.7">Total XP</div><button class="btn btn-outline btn-sm" style="color:#fff;border-color:rgba(255,255,255,.3);margin-top:10px" onclick="showModal('editProfileModal')">Edit Profil</button></div>
+    </div>
+    <div class="grid-2" style="gap:20px">
+      <div class="card">
+        <div class="card-header"><h3>Statistik Karakter</h3></div>
+        <div class="card-body">
+          <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Kedisiplinan</span><span class="progress-val">92%</span></div><div class="progress-track"><div class="progress-fill animated-bar" data-width="92"></div></div></div>
+          <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Ibadah Harian</span><span class="progress-val">85%</span></div><div class="progress-track"><div class="progress-fill animated-bar" data-width="85"></div></div></div>
+          <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Adab &amp; Sosial</span><span class="progress-val">78%</span></div><div class="progress-track"><div class="progress-fill gold animated-bar" data-width="78"></div></div></div>
+          <div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Literasi Qur'an</span><span class="progress-val">88%</span></div><div class="progress-track"><div class="progress-fill blue animated-bar" data-width="88"></div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Pencapaian</h3></div>
+        <div class="card-body" style="padding:8px">
+          <div class="achievement"><div class="ach-icon" style="background:rgba(196,149,90,.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" stroke="var(--copper)" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="ach-name">Hafiz Muda</div><div class="ach-desc">Selesaikan 10 halaman tilawah</div></div><span class="ach-pts">+500 XP</span></div>
+          <div class="achievement"><div class="ach-icon" style="background:rgba(30,158,94,.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a9 9 0 1 0 0 18A9 9 0 0 0 12 2zm0 4v5l3 3" stroke="var(--success)" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="ach-name">Streak Master</div><div class="ach-desc">14 hari berturut-turut aktif</div></div><span class="ach-pts">+200 XP</span></div>
+          <div class="achievement"><div class="ach-icon" style="background:rgba(36,117,168,.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4M12 21V9" stroke="var(--info)" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="ach-name">Top 5 Global</div><div class="ach-desc">Masuk 5 besar leaderboard</div></div><span class="ach-pts">+300 XP</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: SETTINGS -->
+<div id="page-settings" class="page" style="flex-direction:column">
+  <nav class="navbar"><a class="brand" onclick="showPage('dashboard')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
+  <div style="max-width:700px;margin:0 auto;width:100%;padding:28px">
+    <h2 style="font-size:1.4rem;margin-bottom:22px">Pengaturan</h2>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Notifikasi</h3></div>
+      <div class="card-body">
+        <div class="setting-row"><div class="setting-info"><div class="setting-title">Pengingat Shalat</div><div class="setting-sub">Notifikasi 15 menit sebelum waktu shalat</div></div><label class="toggle"><input type="checkbox" checked onchange="settingChange('Pengingat Shalat',this.checked)"><span class="toggle-slider"></span></label></div>
+        <div class="setting-row"><div class="setting-info"><div class="setting-title">Pengingat Misi Harian</div><div class="setting-sub">Notifikasi misi yang belum diselesaikan</div></div><label class="toggle"><input type="checkbox" checked onchange="settingChange('Pengingat Misi',this.checked)"><span class="toggle-slider"></span></label></div>
+        <div class="setting-row"><div class="setting-info"><div class="setting-title">Laporan ke WhatsApp Orang Tua</div><div class="setting-sub">Kirim rekap mingguan ke nomor orang tua</div></div><label class="toggle"><input type="checkbox" checked onchange="settingChange('Laporan WhatsApp',this.checked)"><span class="toggle-slider"></span></label></div>
+        <div class="setting-row"><div class="setting-info"><div class="setting-title">Notifikasi Leaderboard</div><div class="setting-sub">Pemberitahuan jika peringkat berubah</div></div><label class="toggle"><input type="checkbox" onchange="settingChange('Notif Leaderboard',this.checked)"><span class="toggle-slider"></span></label></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Tampilan</h3></div>
+      <div class="card-body">
+        <div class="setting-row"><div class="setting-info"><div class="setting-title">Mode Gelap</div><div class="setting-sub">Aktifkan tampilan gelap untuk kenyamanan mata</div></div><label class="toggle"><input type="checkbox" onchange="toggleDark(this.checked)"><span class="toggle-slider"></span></label></div>
+        <div class="setting-row"><div class="setting-info"><div class="setting-title">Tampilkan Huruf Arab</div><div class="setting-sub">Tampilkan nama surah dalam tulisan Arab</div></div><label class="toggle"><input type="checkbox" checked onchange="settingChange('Huruf Arab',this.checked)"><span class="toggle-slider"></span></label></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Akun</h3></div>
+      <div class="card-body">
+        <div class="setting-row"><div class="setting-info"><div class="setting-title">Ganti Password</div><div class="setting-sub">Terakhir diubah: 3 bulan yang lalu</div></div><button class="btn btn-outline btn-sm" onclick="showModal('forgotModal')">Ganti</button></div>
+        <div class="setting-row"><div class="setting-info"><div class="setting-title" style="color:var(--danger)">Keluar dari Akun</div><div class="setting-sub">Anda akan diarahkan ke halaman login</div></div><button class="btn btn-danger btn-sm" onclick="showPage('landing')">Keluar</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: NEWS DETAIL -->
+<div id="page-news-detail" class="page" style="flex-direction:column">
+  <nav class="navbar"><a class="brand" onclick="showPage('landing')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('landing')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
+  <div style="max-width:800px;margin:0 auto;width:100%;padding:36px 24px" id="newsDetailContent"></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="ppdbModal" onclick="closeModalOutside(event,this)">
+  <div class="modal">
+    <div class="modal-header"><h3>Formulir Pendaftaran PPDB 2026/2027</h3><button class="modal-close" onclick="closeModal('ppdbModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nama Lengkap Calon Siswa</label><input class="form-input" type="text" placeholder="Masukkan nama lengkap"></div>
+      <div class="grid-2" style="gap:12px"><div class="form-group"><label class="form-label">Tanggal Lahir</label><input class="form-input" type="date"></div><div class="form-group"><label class="form-label">Jenjang</label><select class="form-input form-select"><option>SMP (Kelas 7)</option><option>SMA (Kelas 10)</option></select></div></div>
+      <div class="form-group"><label class="form-label">Asal Sekolah</label><input class="form-input" type="text" placeholder="Nama SD/SMP asal"></div>
+      <div class="form-group"><label class="form-label">Nomor WhatsApp Orang Tua</label><input class="form-input" type="tel" placeholder="08xx-xxxx-xxxx"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('ppdbModal')">Batal</button><button class="btn btn-primary" onclick="submitPPDB()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Kirim Pendaftaran</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="forgotModal" onclick="closeModalOutside(event,this)">
+  <div class="modal">
+    <div class="modal-header"><h3>Reset Password</h3><button class="modal-close" onclick="closeModal('forgotModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="modal-body">
+      <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:18px">Masukkan NISN atau email terdaftar.</p>
+      <div class="form-group"><label class="form-label">NISN atau Email</label><input class="form-input" type="text" placeholder="Masukkan NISN atau email"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('forgotModal')">Batal</button><button class="btn btn-primary" onclick="submitForgot()">Kirim Instruksi Reset</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editProfileModal" onclick="closeModalOutside(event,this)">
+  <div class="modal">
+    <div class="modal-header"><h3>Edit Profil</h3><button class="modal-close" onclick="closeModal('editProfileModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nama Lengkap</label><input class="form-input" type="text" value="Ahmad Fauzi"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" value="a.fauzi@muhsch.id"></div>
+      <div class="form-group"><label class="form-label">Target Tilawah Harian</label><select class="form-input form-select"><option>1 Halaman</option><option>2 Halaman</option><option>1 Juz</option></select></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('editProfileModal')">Batal</button><button class="btn btn-primary" onclick="saveProfile()">Simpan Perubahan</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="surahModal" onclick="closeModalOutside(event,this)">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header"><h3 id="surahModalTitle">Al-Fatihah</h3><button class="modal-close" onclick="closeModal('surahModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="modal-body" id="surahModalBody"></div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('surahModal')">Tutup</button><button class="btn btn-primary" onclick="mulaiTilawah()">Mulai Tilawah</button></div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+const state={currentPage:'landing',currentDash:'home',totalXP:2450,streak:14,tilawahPages:0,calYear:2026,calMonth:2};
+const newsData=[
+  {title:'Lomba Milad Muhammadiyah ke-112: Semarak Prestasi Siswa',cat:'Milad',date:'18 November 2024',author:'Redaksi Warta Sekolah',body:'Dalam rangka memperingati Milad Muhammadiyah ke-112, sekolah menyelenggarakan rangkaian lomba bertajuk "Membangun Generasi Unggul dan Berkemajuan".\n\nAcara ini diikuti oleh ratusan siswa dari berbagai tingkatan kelas dengan penuh antusiasme dan semangat berlomba dalam kebaikan.',tags:['#MiladMuhammadiyah112','#PrestasiSiswa','#KarakterUnggul']},
+  {title:'Workshop Robotik: Masa Depan di Tangan Siswa Muhammadiyah',cat:'Inovasi',date:'09 Maret 2026',author:'Tim Digital',body:'Workshop Robotik dan Teknologi digelar untuk membekali siswa dengan kemampuan STEM yang terintegrasi dengan nilai-nilai keislaman.\n\nSiswa-siswi menunjukkan kreativitas luar biasa dalam merancang robot sederhana berbasis Arduino.',tags:['#Inovasi','#Robotika','#STEM']},
+  {title:'Juara Umum Lomba Tahfidz Tingkat Provinsi Jawa Barat',cat:'Prestasi',date:'09 Maret 2026',author:'Redaksi',body:'Siswa SMP Muhammadiyah Jakarta kembali menorehkan prestasi membanggakan dengan meraih Juara Umum dalam Lomba Tahfidz Al-Qur\'an tingkat Provinsi.\n\nPrestasi ini merupakan buah dari program Daily Akhlak Quest yang telah diimplementasikan sejak awal tahun ajaran.',tags:['#Tahfidz','#Prestasi','#Hafalan']}
+];
+
+// ══════════════════════════════════
+// MOBILE NAV
+// ══════════════════════════════════
+function toggleMobileNav(){
+  const drawer=document.getElementById('mobileNavDrawer');
+  const btn=document.getElementById('hamburgerBtn');
+  const isOpen=drawer.classList.contains('open');
+  drawer.classList.toggle('open');
+  btn.classList.toggle('open');
+  document.body.style.overflow=isOpen?'':'hidden';
+}
+// Close mobile nav on ESC
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const d=document.getElementById('mobileNavDrawer');if(d&&d.classList.contains('open'))toggleMobileNav();}});
+
+// ══════════════════════════════════
+// BOTTOM TAB BAR
+// ══════════════════════════════════
+function setActiveBottomTab(id){
+  document.querySelectorAll('.bottom-tab').forEach(t=>t.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el)el.classList.add('active');
+}
+
+// ══════════════════════════════════
+// SCROLL EFFECTS
+// ══════════════════════════════════
+function initScrollEffects(){
+  const nav=document.getElementById('mainNav');
+  const progressBar=document.getElementById('scrollProgress');
+  const scrollTopBtn=document.getElementById('scrollTop');
+
+  window.addEventListener('scroll',()=>{
+    const scrollY=window.scrollY;
+    const docH=document.documentElement.scrollHeight-window.innerHeight;
+    const pct=(scrollY/docH)*100;
+    if(progressBar)progressBar.style.width=pct+'%';
+    if(nav)nav.classList.toggle('scrolled',scrollY>60);
+    if(scrollTopBtn)scrollTopBtn.classList.toggle('show',scrollY>400);
+  },{passive:true});
+}
+
+// ══════════════════════════════════
+// INTERSECTION OBSERVER — REVEAL
+// ══════════════════════════════════
+function initRevealObserver(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('revealed');
+        // animate progress bars when they come into view
+        entry.target.querySelectorAll('.animated-bar').forEach(bar=>{
+          const w=bar.dataset.width||'0';
+          setTimeout(()=>{bar.style.width=w+'%';},200);
+        });
+        // animate counters
+        entry.target.querySelectorAll('.counter-num').forEach(el=>{
+          if(!el.dataset.animated){
+            el.dataset.animated='1';
+            animateCounter(el);
+          }
+        });
+        obs.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el=>obs.observe(el));
+
+  // Also observe progress bars not inside reveal elements
+  const barObs=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting&&!entry.target.style.width){
+        const w=entry.target.dataset.width||'0';
+        entry.target.style.width=w+'%';
+        barObs.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.2});
+  document.querySelectorAll('.animated-bar').forEach(bar=>{
+    if(!bar.closest('.reveal,.reveal-left,.reveal-right'))barObs.observe(bar);
+  });
+}
+
+// ══════════════════════════════════
+// COUNTER ANIMATION
+// ══════════════════════════════════
+function animateCounter(el){
+  const target=parseInt(el.dataset.target||'0');
+  const suffix=el.dataset.suffix||'';
+  const dur=1500;
+  const start=performance.now();
+  function step(now){
+    const p=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    const val=Math.floor(ease*target);
+    el.textContent=val.toLocaleString('id-ID')+suffix;
+    if(p<1)requestAnimationFrame(step);
+    else el.textContent=target.toLocaleString('id-ID')+suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+// ══════════════════════════════════
+// CURSOR GLOW (landing only)
+// ══════════════════════════════════
+function initCursorGlow(){
+  const glow=document.getElementById('cursorGlow');
+  if(!glow)return;
+  let mx=0,my=0,cx=0,cy=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});
+  function animGlow(){
+    cx+=(mx-cx)*.08;cy+=(my-cy)*.08;
+    if(state.currentPage==='landing'){
+      glow.style.transform=`translate(${cx-150}px,${cy-150}px)`;
+      glow.style.opacity='1';
+    } else {
+      glow.style.opacity='0';
+    }
+    requestAnimationFrame(animGlow);
+  }
+  requestAnimationFrame(animGlow);
+}
+
+// ══════════════════════════════════
+// RIPPLE EFFECT ON BUTTONS
+// ══════════════════════════════════
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.btn');
+  if(!btn||btn.classList.contains('btn-ghost'))return;
+  const r=document.createElement('span');
+  r.className='ripple';
+  const rect=btn.getBoundingClientRect();
+  const size=Math.max(rect.width,rect.height)*2;
+  r.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+  btn.appendChild(r);
+  setTimeout(()=>r.remove(),600);
+});
+
+// ══════════════════════════════════
+// PAGE NAVIGATION
+// ══════════════════════════════════
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  const pg=document.getElementById('page-'+p);
+  if(pg)pg.classList.add('active');
+  state.currentPage=p;
+  window.scrollTo(0,0);
+  if(p==='dashboard')renderCalendar();
+  if(p==='landing'){
+    setTimeout(()=>{
+      // Re-init observers for landing page elements
+      document.querySelectorAll('.reveal:not(.revealed),.reveal-left:not(.revealed),.reveal-right:not(.revealed),.reveal-scale:not(.revealed)').forEach(el=>{
+        const rect=el.getBoundingClientRect();
+        if(rect.top<window.innerHeight)el.classList.add('revealed');
+      });
+    },100);
+  }
+}
+
+function scrollToSection(id){
+  showPage('landing');
+  setTimeout(()=>{
+    const el=document.getElementById(id);
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+// ══════════════════════════════════
+// LOGIN
+// ══════════════════════════════════
+function togglePwd(){
+  const inp=document.getElementById('loginPass');
+  const icon=document.getElementById('eyeIcon');
+  if(inp.type==='password'){
+    inp.type='text';
+    icon.innerHTML='<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+  } else {
+    inp.type='password';
+    icon.innerHTML='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>';
+  }
+}
+
+function selectRole(el,role){
+  el.closest('.role-grid').querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function doLogin(){
+  const id=document.getElementById('loginId').value.trim();
+  const pass=document.getElementById('loginPass').value.trim();
+  if(!id||!pass){showToast('Harap isi User ID dan Password','danger');return;}
+  const btn=event.currentTarget;
+  const orig=btn.innerHTML;
+  btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="animation:spin .6s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg> Masuk...';
+  btn.disabled=true;
+  setTimeout(()=>{
+    btn.innerHTML=orig;btn.disabled=false;
+    showToast('Login berhasil! Selamat datang, Ahmad Fauzi.','success');
+    setTimeout(()=>{showPage('dashboard');showDashSection('home');},600);
+  },1200);
+}
+
+// ══════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════
+function showDashSection(sec){
+  document.querySelectorAll('[id^="dash-"]').forEach(el=>{el.style.display='none';});
+  const el=document.getElementById('dash-'+sec);
+  if(el){el.style.display='block';el.classList.remove('anim-fade');void el.offsetWidth;el.classList.add('anim-fade');}
+  document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+  const links={home:0,misi:1,leaderboard:2,shalat:3,quran:4,kalender:5};
+  const idx=links[sec];
+  if(idx!==undefined){const all=document.querySelectorAll('.sidebar a');if(all[idx])all[idx].classList.add('active');}
+  state.currentDash=sec;
+  if(sec==='kalender')renderCalendar();
+  // Animate progress bars in dashboard
+  setTimeout(()=>{
+    document.querySelectorAll('#dash-'+sec+' .animated-bar').forEach(bar=>{
+      bar.style.width=(bar.dataset.width||'0')+'%';
+    });
+  },200);
+}
+
+function completeTask(el,pts,name){
+  const box=el.querySelector('.check-box');
+  if(box.classList.contains('done'))return;
+  box.classList.add('done');
+  box.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  el.querySelector('.check-text').classList.add('done');
+  addXP(pts,name);
+}
+
+function ambilMisi(btn,pts,name){
+  if(btn.dataset.done)return;
+  btn.dataset.done='1';btn.disabled=true;
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Selesai!';
+  btn.style.background='var(--success)';
+  btn.closest('.mission-card').classList.add('completed');
+  addXP(pts,name);
+}
+
+function addXP(pts,name){
+  state.totalXP+=pts;
+  showToast('Alhamdulillah! '+name+' selesai','success','+'+pts+' XP');
+}
+
+function logTilawah(){
+  if(state.tilawahPages>=1){showToast('Target hari ini sudah tercapai! Alhamdulillah.','success');return;}
+  state.tilawahPages=1;
+  document.getElementById('halToday').textContent='1';
+  document.getElementById('tilawahPct').textContent='100%';
+  document.getElementById('tilawahBar').style.width='100%';
+  addXP(30,'Tilawah Al-Qur\'an');
+}
+
+function filterSurah(type){
+  document.querySelectorAll('.surah-row').forEach(row=>{row.style.display=(row.dataset.type===type)?'flex':'none';});
+}
+
+function openSurahDetail(num,name,ayat,type){
+  document.getElementById('surahModalTitle').textContent='Surah '+name;
+  document.getElementById('surahModalBody').innerHTML=`<div style="background:linear-gradient(135deg,var(--verd-3),var(--primary));border-radius:12px;padding:22px;color:#fff;text-align:center;margin-bottom:18px"><div style="font-size:2rem;margin-bottom:8px;font-weight:700;direction:rtl">${name}</div><div style="opacity:.75;font-size:.88rem">${name} · ${ayat} Ayat · ${type}</div></div><div class="grid-2" style="gap:12px;margin-bottom:16px"><div style="background:var(--surface-2);border-radius:10px;padding:12px;text-align:center"><div style="font-weight:700;font-size:1.1rem;color:var(--primary)">${ayat}</div><div style="font-size:.72rem;color:var(--text-muted)">Jumlah Ayat</div></div><div style="background:var(--surface-2);border-radius:10px;padding:12px;text-align:center"><div style="font-weight:700;font-size:1.1rem;color:var(--primary)">${type}</div><div style="font-size:.72rem;color:var(--text-muted)">Kategori</div></div></div><div style="background:var(--surface-2);border-radius:10px;padding:14px;font-size:.85rem;color:var(--text-muted);line-height:1.7">Surah ${name} adalah surah ke-${num} dalam Al-Qur'an dengan ${ayat} ayat, termasuk golongan surah ${type}.</div>`;
+  showModal('surahModal');
+}
+
+function mulaiTilawah(){closeModal('surahModal');logTilawah();}
+function checkinShalat(){addXP(60,'Shalat Dzuhur Berjamaah (+10 bonus masjid)');}
+function filterMisi(btn,cat){
+  document.querySelectorAll('.tabs .tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('#misiGrid .mission-card').forEach(c=>{c.style.display=(cat==='semua'||c.dataset.cat===cat)?'block':'none';});
+}
+function switchTab(btn,secId){
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  ['lb-global','lb-kelas','lb-mingguan'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  const target=document.getElementById(secId);if(target)target.style.display='block';
+}
+function toggleFAQ(el){
+  const ans=el.nextElementSibling;const isOpen=ans.classList.contains('open');
+  document.querySelectorAll('.faq-a.open').forEach(a=>{a.classList.remove('open');a.previousElementSibling.querySelector('svg').style.transform='';});
+  if(!isOpen){ans.classList.add('open');el.querySelector('svg').style.transform='rotate(180deg)';}
+}
+function filterFAQ(q){
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    const text=item.querySelector('.faq-q').textContent.toLowerCase();
+    item.style.display=text.includes(q.toLowerCase())?'block':'none';
+  });
+}
+
+// ══════════════════════════════════
+// CALENDAR
+// ══════════════════════════════════
+function renderCalendar(){
+  const{calYear,calMonth}=state;
+  const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const titleEl=document.getElementById('calTitle');
+  if(titleEl)titleEl.textContent=months[calMonth]+' '+calYear;
+  const daysEl=document.getElementById('calDays');
+  if(!daysEl)return;
+  daysEl.innerHTML='';
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const prevDays=new Date(calYear,calMonth,0).getDate();
+  const events=[9,15,22,28];
+  for(let i=firstDay-1;i>=0;i--){daysEl.innerHTML+=`<div class="cal-day other-month">${prevDays-i}</div>`;}
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=(d===9&&calMonth===2&&calYear===2026);
+    const hasEvent=events.includes(d);
+    daysEl.innerHTML+=`<div class="cal-day ${isToday?'today':''} ${hasEvent?'has-event':''}" onclick="calDayClick(${d})">${d}</div>`;
+  }
+}
+function calDayClick(d){const evMap={9:'Ujian Tengah Semester',15:'Jalan Sehat Keluarga Besar',22:'Workshop Robotik',28:'Batas SPP'};if(evMap[d])showToast(d+' Maret: '+evMap[d],'info');}
+function prevMonth(){state.calMonth--;if(state.calMonth<0){state.calMonth=11;state.calYear--;}renderCalendar();}
+function nextMonth(){state.calMonth++;if(state.calMonth>11){state.calMonth=0;state.calYear++;}renderCalendar();}
+
+// ══════════════════════════════════
+// MODALS
+// ══════════════════════════════════
+function showModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,el){if(e.target===el)el.classList.remove('open');}
+function submitPPDB(){closeModal('ppdbModal');showToast('Formulir PPDB berhasil dikirim! Tim kami akan menghubungi Anda.','success');}
+function submitForgot(){closeModal('forgotModal');showToast('Instruksi reset password telah dikirim.','success');}
+function saveProfile(){closeModal('editProfileModal');showToast('Profil berhasil disimpan!','success');}
+function markAllRead(){document.querySelectorAll('.notif-item.unread').forEach(el=>el.classList.remove('unread'));showToast('Semua notifikasi telah ditandai dibaca','success');}
+function settingChange(name,val){showToast((val?'Mengaktifkan':'Menonaktifkan')+' '+name,'info');}
+function toggleDark(on){showToast('Mode '+(on?'Gelap':'Terang')+' aktif (demo)','info');}
+
+// ══════════════════════════════════
+// NEWS
+// ══════════════════════════════════
+function openNewsDetail(idx){
+  const n=newsData[idx];
+  document.getElementById('newsDetailContent').innerHTML=`
+    <div style="margin-bottom:20px">
+      <span class="badge badge-accent" style="margin-bottom:10px;display:inline-block">${n.cat}</span>
+      <h1 class="serif" style="font-size:1.9rem;line-height:1.25;margin-bottom:12px">${n.title}</h1>
+      <div style="display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:.82rem">${n.date} · ${n.author}</div>
+    </div>
+    <div style="background:linear-gradient(135deg,var(--verd-4),var(--primary));height:280px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:28px">
+      <svg width="72" height="72" viewBox="0 0 24 24" fill="none" opacity=".25"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" stroke="white" stroke-width="1.5" fill="white"/></svg>
+    </div>
+    ${n.body.split('\n\n').map(p=>`<p style="font-size:.95rem;line-height:1.8;color:var(--text);margin-bottom:18px">${p}</p>`).join('')}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px">${n.tags.map(t=>`<span class="news-tag">${t}</span>`).join('')}</div>
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border);display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="showToast('Link disalin!','success')">Bagikan</button>
+      <button class="btn btn-outline" onclick="showPage('landing')">Kembali</button>
+    </div>`;
+  showPage('news-detail');
+}
+
+// ══════════════════════════════════
+// TOAST
+// ══════════════════════════════════
+function showToast(title,type,pts){
+  const colors={success:'var(--success)',danger:'#c0392b',info:'var(--info)',warn:'var(--warn)'};
+  const icons={
+    success:'<path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    danger:'<path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    info:'<circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>',
+    warn:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="white" stroke-width="2" stroke-linejoin="round"/>'
+  };
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<div class="toast-icon" style="background:${colors[type]||colors.success}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none">${icons[type]||icons.info}</svg></div><div><div class="toast-title">${title}</div></div>${pts?`<div class="toast-pts" style="color:${colors[type]}">${pts}</div>`:''}`;
+  document.getElementById('toastContainer').appendChild(t);
+  requestAnimationFrame(()=>{setTimeout(()=>t.classList.add('show'),10);});
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400);},3200);
+}
+
+// ══════════════════════════════════
+// INIT
+// ═══════════════════════�
+document.addEventListener('DOMContentLoaded',()=>{
+  initScrollEffects();
+  initRevealObserver();
+  initCursorGlow();
+  renderCalendar();
+
+  // Animate hero counters immediately
+  document.querySelectorAll('.hero .counter-num').forEach(el=>animateCounter(el));
+});
+</script>
+</body>
+</html>
