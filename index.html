@@ -667,11 +667,26 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
   .btn-primary:hover{transform:none}
   .lb-row:hover{transform:none}
   .surah-row:hover{transform:none}
-  /* Ensure tap targets are large enough */
   .btn{min-height:44px}
   .sidebar a,.bottom-tab{min-height:44px}
   .check-item{min-height:44px}
   .nav-links a{min-height:44px}
+}
+
+/* ══ MORE DRAWER (mobile) ══ */
+.more-drawer-overlay{position:fixed;inset:0;background:rgba(10,40,30,.5);backdrop-filter:blur(3px);z-index:148;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.more-drawer-overlay.open{opacity:1;pointer-events:all}
+.more-drawer{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-radius:20px 20px 0 0;z-index:149;padding:12px 20px 32px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 -8px 40px rgba(14,61,48,.2)}
+.more-drawer.open{transform:translateY(0)}
+.more-drawer-handle{width:40px;height:4px;background:var(--border);border-radius:100px;margin:0 auto 16px}
+.more-drawer-title{font-weight:700;font-size:.95rem;color:var(--text);margin-bottom:16px;text-align:center}
+.more-drawer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.more-drawer-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border:1px solid var(--border);border-radius:14px;background:var(--surface);cursor:pointer;font-family:inherit;transition:all .2s;position:relative}
+.more-drawer-item:active{transform:scale(.96);background:var(--surface-2)}
+.more-drawer-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative}
+.more-drawer-item span:last-child{font-size:.72rem;font-weight:600;color:var(--text);text-align:center}
+@supports(padding:env(safe-area-inset-bottom)){
+  .more-drawer{padding-bottom:calc(32px + env(safe-area-inset-bottom))}
 }
 </style>
 </head>
@@ -775,11 +790,9 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
           <p>Integrasi nilai-nilai Kemuhammadiyahan dalam pengalaman interaktif untuk mencetak generasi unggul berkemajuan.</p>
           <div class="hero-btns">
             <button class="btn btn-accent btn-lg" onclick="showPage('login')">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Mulai Sekarang
             </button>
             <button class="btn btn-outline btn-lg" style="color:#fff;border-color:rgba(255,255,255,.35)" onclick="scrollToSection('tentang')">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/><path d="M12 8v4l3 3" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
               Pelajari Lebih
             </button>
           </div>
@@ -917,7 +930,7 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
     <div class="section-inner">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px" class="reveal">
         <div><div class="section-tag">Warta Sekolah</div><h2 class="section-title">Berita Terkini</h2></div>
-        <button class="btn btn-outline btn-sm" onclick="showPage('news-detail')">Lihat Semua →</button>
+        <button class="btn btn-outline btn-sm" onclick="showPage('news-detail')">Lihat Semua</button>
       </div>
       <div class="grid-3">
         <div class="news-card reveal stagger-1" onclick="openNewsDetail(0)">
@@ -1043,7 +1056,7 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
         <div class="footer-brand"><div style="width:34px;height:34px;background:linear-gradient(135deg,var(--copper),var(--copper-light));border-radius:9px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div><span class="footer-brand-name">Muhammadiyah Digital</span></div>
         <div class="footer-desc">Mewujudkan pendidikan Islam yang unggul, modern, dan berkemajuan dengan mengintegrasikan nilai-nilai luhur dan teknologi digital.</div>
         <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgba(255,255,255,.5)" stroke-width="2"/><polyline points="22,6 12,13 2,6" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="60090e060f200d1508010d0d0104091901084e1303084e0904">info@umg.ac.id</a></div>
-        <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.5 18a19.45 19.45 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> +62 812-3456-7890</div>
+        <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.5 18a19.45 19.45 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> +62 (21) 1234 5678</div>
       </div>
       <div><h4>Tautan Cepat</h4><ul class="footer-links"><li><a onclick="showPage('login')">Portal Siswa</a></li><li><a onclick="showPage('login')">E-Learning</a></li><li><a onclick="scrollToSection('fitur')">Fitur Karakter</a></li><li><a onclick="showModal('ppdbModal')">PPDB 2026</a></li></ul></div>
       <div><h4>Informasi</h4><ul class="footer-links"><li><a onclick="scrollToSection('tentang')">Tentang Kami</a></li><li><a onclick="scrollToSection('berita')">Berita</a></li><li><a onclick="scrollToSection('bantuan')">FAQ</a></li><li><a>Kebijakan Privasi</a></li></ul></div>
@@ -1123,7 +1136,7 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
   <nav class="navbar">
     <a class="brand" onclick="showPage('dashboard')">
       <div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>
-     MUHAMMADIYAH DIGITAL SCHOOL
+      MUHAMMADIYAH DIGITAL SCHOOL
     </a>
     <div class="nav-links">
       <button class="btn btn-ghost" style="color:rgba(255,255,255,.8);position:relative" onclick="showPage('notif')">
@@ -1407,12 +1420,58 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4M12 21V9M4 12V5a1 1 0 0 1 1-1h3M20 12V5a1 1 0 0 0-1-1h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <span>Rank</span>
       </button>
-      <button class="bottom-tab" id="btab-profil" onclick="showPage('profile')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
-        <span>Profil</span>
+      <button class="bottom-tab" id="btab-more" onclick="toggleMoreDrawer()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg>
+        <span>Lainnya</span>
       </button>
     </div>
   </nav>
+
+  <!-- MORE DRAWER (mobile) -->
+  <div class="more-drawer-overlay" id="moreDrawerOverlay" onclick="toggleMoreDrawer()"></div>
+  <div class="more-drawer" id="moreDrawer">
+    <div class="more-drawer-handle"></div>
+    <div class="more-drawer-title">Menu Lainnya</div>
+    <div class="more-drawer-grid">
+      <button class="more-drawer-item" onclick="showDashSection('shalat');setActiveBottomTab('btab-more');toggleMoreDrawer()">
+        <div class="more-drawer-icon" style="background:rgba(196,149,90,.15)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--copper)" stroke-width="2"/><path d="M12 6v6l4 2" stroke="var(--copper)" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <span>Jadwal Shalat</span>
+      </button>
+      <button class="more-drawer-item" onclick="showDashSection('kalender');setActiveBottomTab('btab-more');toggleMoreDrawer()">
+        <div class="more-drawer-icon" style="background:rgba(36,117,168,.12)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="var(--info)" stroke-width="2"/><line x1="16" y1="2" x2="16" y2="6" stroke="var(--info)" stroke-width="2" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="var(--info)" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="var(--info)" stroke-width="2"/></svg>
+        </div>
+        <span>Kalender</span>
+      </button>
+      <button class="more-drawer-item" onclick="showPage('notif');toggleMoreDrawer()" style="position:relative">
+        <div class="more-drawer-icon" style="background:rgba(192,57,43,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="var(--danger)" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="var(--danger)" stroke-width="2" stroke-linecap="round"/></svg>
+          <span style="position:absolute;top:4px;right:4px;width:14px;height:14px;background:var(--danger);border-radius:50%;font-size:.55rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff">5</span>
+        </div>
+        <span>Notifikasi</span>
+      </button>
+      <button class="more-drawer-item" onclick="showPage('profile');toggleMoreDrawer()">
+        <div class="more-drawer-icon" style="background:rgba(46,139,107,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="var(--primary)" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="var(--primary)" stroke-width="2"/></svg>
+        </div>
+        <span>Profil Saya</span>
+      </button>
+      <button class="more-drawer-item" onclick="showPage('settings');toggleMoreDrawer()">
+        <div class="more-drawer-icon" style="background:rgba(46,139,107,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="var(--primary)" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="var(--primary)" stroke-width="2"/></svg>
+        </div>
+        <span>Pengaturan</span>
+      </button>
+      <button class="more-drawer-item" onclick="showPage('landing');toggleMoreDrawer()">
+        <div class="more-drawer-icon" style="background:rgba(192,57,43,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span>Keluar</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- PAGE: NOTIFIKASI -->
@@ -1555,6 +1614,18 @@ const newsData=[
   {title:'Workshop Robotik: Masa Depan di Tangan Siswa Muhammadiyah',cat:'Inovasi',date:'09 Maret 2026',author:'Tim Digital',body:'Workshop Robotik dan Teknologi digelar untuk membekali siswa dengan kemampuan STEM yang terintegrasi dengan nilai-nilai keislaman.\n\nSiswa-siswi menunjukkan kreativitas luar biasa dalam merancang robot sederhana berbasis Arduino.',tags:['#Inovasi','#Robotika','#STEM']},
   {title:'Juara Umum Lomba Tahfidz Tingkat Provinsi Jawa Barat',cat:'Prestasi',date:'09 Maret 2026',author:'Redaksi',body:'Siswa SMP Muhammadiyah Jakarta kembali menorehkan prestasi membanggakan dengan meraih Juara Umum dalam Lomba Tahfidz Al-Qur\'an tingkat Provinsi.\n\nPrestasi ini merupakan buah dari program Daily Akhlak Quest yang telah diimplementasikan sejak awal tahun ajaran.',tags:['#Tahfidz','#Prestasi','#Hafalan']}
 ];
+
+// ══════════════════════════════════
+// MORE DRAWER (mobile)
+// ══════════════════════════════════
+function toggleMoreDrawer(){
+  const drawer=document.getElementById('moreDrawer');
+  const overlay=document.getElementById('moreDrawerOverlay');
+  const isOpen=drawer.classList.contains('open');
+  drawer.classList.toggle('open',!isOpen);
+  overlay.classList.toggle('open',!isOpen);
+  document.body.style.overflow=isOpen?'':'hidden';
+}
 
 // ══════════════════════════════════
 // MOBILE NAV
