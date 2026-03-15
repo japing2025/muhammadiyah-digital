@@ -673,6 +673,13 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
   .nav-links a{min-height:44px}
 }
 
+/* ══ SUB-PAGE NAVBAR (always shows back button) ══ */
+.navbar-sub{background:linear-gradient(135deg,var(--verd-4),var(--verd-3));padding:0 20px;display:flex;align-items:center;gap:12px;height:56px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(14,61,48,.3)}
+.navbar-sub-back{width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .2s;color:#fff}
+.navbar-sub-back:hover{background:rgba(255,255,255,.2)}
+.navbar-sub-title{font-weight:700;font-size:1rem;color:#fff;flex:1}
+.navbar-sub-right{display:flex;gap:6px;align-items:center}
+
 /* ══ MORE DRAWER (mobile) ══ */
 .more-drawer-overlay{position:fixed;inset:0;background:rgba(10,40,30,.5);backdrop-filter:blur(3px);z-index:148;opacity:0;pointer-events:none;transition:opacity .3s ease}
 .more-drawer-overlay.open{opacity:1;pointer-events:all}
@@ -717,7 +724,7 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
       <div class="brand-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/><path d="M12 2v20M3 7l9 5 9-5" stroke="white" stroke-width="1.5"/></svg>
       </div>
-      <span class="brand-text">MUHAMMADIYAH DIGITAL SCHOOL</span>
+      <span class="brand-text"> MUHAMMADIYAH DIGITAL SCHOOL</span>
     </a>
     <div class="nav-links">
       <a class="active" onclick="showPage('landing')">Home</a>
@@ -741,7 +748,7 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
       </button>
       <div style="padding:0 4px 16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px">
         <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px">Platform</div>
-        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;line-height:1.3">MUHAMMADIYAH DIGITAL SCHOOL</div>
+        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;line-height:1.3"> MUHAMMADIYAH DIGITAL SCHOOL</div>
       </div>
       <a onclick="showPage('landing');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/></svg>Home</a>
       <a onclick="scrollToSection('fitur');toggleMobileNav()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Fitur Karakter</a>
@@ -1055,12 +1062,12 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
       <div>
         <div class="footer-brand"><div style="width:34px;height:34px;background:linear-gradient(135deg,var(--copper),var(--copper-light));border-radius:9px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div><span class="footer-brand-name">Muhammadiyah Digital</span></div>
         <div class="footer-desc">Mewujudkan pendidikan Islam yang unggul, modern, dan berkemajuan dengan mengintegrasikan nilai-nilai luhur dan teknologi digital.</div>
-        <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgba(255,255,255,.5)" stroke-width="2"/><polyline points="22,6 12,13 2,6" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="60090e060f200d1508010d0d0104091901084e1303084e0904">info@umg.ac.id</a></div>
+        <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgba(255,255,255,.5)" stroke-width="2"/><polyline points="22,6 12,13 2,6" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="60090e060f200d1508010d0d0104091901084e1303084e0904">[email&#160;protected]</a></div>
         <div class="footer-contact-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.5 18a19.45 19.45 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg> +62 (21) 1234 5678</div>
       </div>
       <div><h4>Tautan Cepat</h4><ul class="footer-links"><li><a onclick="showPage('login')">Portal Siswa</a></li><li><a onclick="showPage('login')">E-Learning</a></li><li><a onclick="scrollToSection('fitur')">Fitur Karakter</a></li><li><a onclick="showModal('ppdbModal')">PPDB 2026</a></li></ul></div>
       <div><h4>Informasi</h4><ul class="footer-links"><li><a onclick="scrollToSection('tentang')">Tentang Kami</a></li><li><a onclick="scrollToSection('berita')">Berita</a></li><li><a onclick="scrollToSection('bantuan')">FAQ</a></li><li><a>Kebijakan Privasi</a></li></ul></div>
-      <div><h4>Hubungi Kami</h4><ul class="footer-links"><li><a>WhatsApp: 0812-3456-7890</a></li><li><a>Email: <span class="__cf_email__" data-cfemail="4821262e2708253d203b2b2066212c">info@umg.ac.id</span></a></li><li><a>Call Center: 021-1234-5678</a></li><li><a>Jam: 07.00 – 16.00 WIB</a></li></ul></div>
+      <div><h4>Hubungi Kami</h4><ul class="footer-links"><li><a>WhatsApp: 0812-3456-7890</a></li><li><a>Email: <span class="__cf_email__" data-cfemail="4821262e2708253d203b2b2066212c">[email&#160;protected]</span></a></li><li><a>Call Center: 021-1234-5678</a></li><li><a>Jam: 07.00 – 16.00 WIB</a></li></ul></div>
     </div>
     <div class="footer-bottom"><span>© 2026 Pimpinan Pusat Muhammadiyah · All rights reserved</span><span>Daily Akhlak Quest · Platform Karakter Digital</span></div>
   </footer>
@@ -1136,7 +1143,7 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
   <nav class="navbar">
     <a class="brand" onclick="showPage('dashboard')">
       <div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>
-      MUHAMMADIYAH DIGITAL SCHOOL
+       MUHAMMADIYAH DIGITAL SCHOOL
     </a>
     <div class="nav-links">
       <button class="btn btn-ghost" style="color:rgba(255,255,255,.8);position:relative" onclick="showPage('notif')">
@@ -1476,12 +1483,12 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
 
 <!-- PAGE: NOTIFIKASI -->
 <div id="page-notif" class="page" style="flex-direction:column">
-  <nav class="navbar"><a class="brand" onclick="showPage('dashboard')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
-  <div style="max-width:700px;margin:0 auto;width:100%;padding:28px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
-      <div><h2 style="font-size:1.4rem;margin-bottom:3px">Notifikasi</h2><p style="color:var(--text-muted);font-size:.85rem">5 notifikasi belum dibaca</p></div>
-      <button class="btn btn-ghost btn-sm" onclick="markAllRead()">Tandai Semua Dibaca</button>
-    </div>
+  <nav class="navbar-sub">
+    <button class="navbar-sub-back" onclick="showPage('dashboard')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span class="navbar-sub-title">Notifikasi</span>
+    <div class="navbar-sub-right"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="markAllRead()">Baca Semua</button></div>
+  </nav>
+  <div style="max-width:700px;margin:0 auto;width:100%;padding:24px 20px">
     <div id="notifList">
       <div class="notif-item unread" onclick="this.classList.remove('unread')"><div class="notif-icon-wrap" style="background:rgba(30,158,94,.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1"><div class="notif-title">Alhamdulillah! Misi Selesai</div><div class="notif-sub">Kamu berhasil menyelesaikan misi Tilawah Al-Qur'an. +50 XP terkumpul.</div><div class="notif-time">Hari ini, 10:30 WIB</div></div><span class="badge badge-success">+50 XP</span></div>
       <div class="notif-item unread" onclick="this.classList.remove('unread')"><div class="notif-icon-wrap" style="background:rgba(196,149,90,.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" stroke="var(--copper)" stroke-width="2" stroke-linejoin="round"/></svg></div><div style="flex:1"><div class="notif-title">Pencapaian Baru: Hafiz Muda!</div><div class="notif-sub">Kamu telah menyelesaikan 10 halaman tilawah minggu ini. Luar biasa!</div><div class="notif-time">Kemarin, 18:45 WIB</div></div><span class="badge badge-accent">Pencapaian</span></div>
@@ -1493,8 +1500,12 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
 
 <!-- PAGE: PROFIL -->
 <div id="page-profile" class="page" style="flex-direction:column">
-  <nav class="navbar"><a class="brand" onclick="showPage('dashboard')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
-  <div style="max-width:900px;margin:0 auto;width:100%;padding:28px">
+  <nav class="navbar-sub">
+    <button class="navbar-sub-back" onclick="showPage('dashboard')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span class="navbar-sub-title">Profil Saya</span>
+    <div class="navbar-sub-right"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showModal('editProfileModal')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+  </nav>
+  <div style="max-width:900px;margin:0 auto;width:100%;padding:24px 20px">
     <div class="profile-hero">
       <div class="profile-avatar">AF</div>
       <div style="flex:1"><div class="profile-name">Ahmad Fauzi</div><div class="profile-sub">NISN: 2024001 · Kelas 8A · SMP Muhammadiyah Jakarta</div><div class="profile-badges"><span class="profile-badge">Level 12: Mujahid</span><span class="profile-badge">Streak 14 Hari</span><span class="profile-badge">Hafiz Muda</span></div></div>
@@ -1524,9 +1535,11 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
 
 <!-- PAGE: SETTINGS -->
 <div id="page-settings" class="page" style="flex-direction:column">
-  <nav class="navbar"><a class="brand" onclick="showPage('dashboard')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
-  <div style="max-width:700px;margin:0 auto;width:100%;padding:28px">
-    <h2 style="font-size:1.4rem;margin-bottom:22px">Pengaturan</h2>
+  <nav class="navbar-sub">
+    <button class="navbar-sub-back" onclick="showPage('dashboard')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span class="navbar-sub-title">Pengaturan</span>
+  </nav>
+  <div style="max-width:700px;margin:0 auto;width:100%;padding:24px 20px">
     <div class="card" style="margin-bottom:16px">
       <div class="card-header"><h3>Notifikasi</h3></div>
       <div class="card-body">
@@ -1555,7 +1568,10 @@ footer h4{color:#fff;font-size:.85rem;font-weight:700;margin-bottom:14px}
 
 <!-- PAGE: NEWS DETAIL -->
 <div id="page-news-detail" class="page" style="flex-direction:column">
-  <nav class="navbar"><a class="brand" onclick="showPage('landing')"><div class="brand-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg></div>Muhammadiyah Digital</a><div class="nav-links"><button class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.7)" onclick="showPage('landing')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button></div></nav>
+  <nav class="navbar-sub">
+    <button class="navbar-sub-back" onclick="showPage('landing')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span class="navbar-sub-title">Berita</span>
+  </nav>
   <div style="max-width:800px;margin:0 auto;width:100%;padding:36px 24px" id="newsDetailContent"></div>
 </div>
 
